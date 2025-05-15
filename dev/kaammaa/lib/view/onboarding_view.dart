@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/view/login_view.dart';
+import 'package:kaammaa/view/selection_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -78,7 +78,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => const Loginview(),
+                                builder: (context) => const SelectionView(),
                               ),
                             );
                           },
