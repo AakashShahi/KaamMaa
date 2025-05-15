@@ -31,7 +31,7 @@ class _SignupviewState extends State<Signupview> {
                       Navigator.pop(context); // Navigate back
                     },
                     icon: Image.asset(
-                      "assets/images/backlogo.png",
+                      "assets/logo/backlogo.png",
                       height: 40,
                       width: 40,
                     ),
@@ -160,7 +160,7 @@ Widget _buildSignUpOption(BuildContext context) {
           "Already in ",
           style: TextStyle(fontFamily: "Inter", fontSize: 16),
         ),
-        Image.asset("assets/images/kaammaa_txt.png", height: 100, width: 100),
+        Image.asset("assets/logo/kaammaa_txt.png", height: 100, width: 100),
         const SizedBox(width: 5),
         GestureDetector(
           onTap: () {

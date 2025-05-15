@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/view/loginview.dart';
+import 'package:kaammaa/view/splash_screen_view.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -8,7 +8,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Loginview(),
+      home: SplashScreenView(),
     );
   }
 }
