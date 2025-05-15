@@ -1,6 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:kaammaa/view/loginview.dart';
+import 'package:kaammaa/view/onboarding_view.dart';
 import 'package:lottie/lottie.dart';
 
 class SplashScreenView extends StatelessWidget {
@@ -34,7 +34,7 @@ class SplashScreenView extends StatelessWidget {
           ),
         ),
       ),
-      nextScreen: const Loginview(),
+      nextScreen: const OnboardingView(),
       splashIconSize:
           screenHeight, // Doesn't affect since we're customizing splash
       backgroundColor: Colors.white,

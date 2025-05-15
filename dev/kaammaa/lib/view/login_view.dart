@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/view/signupview.dart';
+import 'package:kaammaa/view/signup_view.dart';
 
 class Loginview extends StatefulWidget {
   const Loginview({super.key});
