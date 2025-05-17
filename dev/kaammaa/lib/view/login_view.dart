@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kaammaa/constants/app_colors.dart'; // NEW
@@ -36,45 +35,7 @@ class _LoginviewState extends State<Loginview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconButton(
-                        onPressed: () async {
-                          final shouldExit = await showDialog<bool>(
-                            context: context,
-                            builder:
-                                (context) => AlertDialog(
-                                  title: const Text('Exit App'),
-                                  content: const Text(
-                                    'Do you want to exit the app?',
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed:
-                                          () =>
-                                              Navigator.of(context).pop(false),
-                                      child: const Text(
-                                        'Cancel',
-                                        style: TextStyle(
-                                          color: AppColors.textPrimary,
-                                        ),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed:
-                                          () => Navigator.of(context).pop(true),
-                                      child: const Text(
-                                        'Exit',
-                                        style: TextStyle(
-                                          color: AppColors.error,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                          );
-
-                          if (shouldExit == true) {
-                            exit(0);
-                          }
-                        },
+                        onPressed: () => Navigator.pop(context),
                         icon: Image.asset(
                           "assets/logo/backlogo.png",
                           height: 40,

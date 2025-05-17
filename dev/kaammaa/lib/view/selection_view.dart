@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/view/login_view.dart';
+import 'package:kaammaa/view/signup_view.dart';
 
 class SelectionView extends StatefulWidget {
   const SelectionView({super.key});
@@ -90,7 +90,7 @@ class _SelectionViewState extends State<SelectionView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Loginview(),
+                                  builder: (context) => const Signupview(),
                                 ),
                               );
                             },
