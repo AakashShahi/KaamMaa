@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:kaammaa/constants/app_colors.dart'; // NEW
+import 'package:kaammaa/view/dashboard_view.dart';
 import 'package:kaammaa/view/signup_view.dart';
 
 class Loginview extends StatefulWidget {
@@ -11,6 +14,8 @@ class Loginview extends StatefulWidget {
 
 class _LoginviewState extends State<Loginview> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
@@ -18,7 +23,7 @@ class _LoginviewState extends State<Loginview> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -47,7 +52,9 @@ class _LoginviewState extends State<Loginview> {
                                               Navigator.of(context).pop(false),
                                       child: const Text(
                                         'Cancel',
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(
+                                          color: AppColors.textPrimary,
+                                        ),
                                       ),
                                     ),
                                     TextButton(
@@ -55,7 +62,9 @@ class _LoginviewState extends State<Loginview> {
                                           () => Navigator.of(context).pop(true),
                                       child: const Text(
                                         'Exit',
-                                        style: TextStyle(color: Colors.red),
+                                        style: TextStyle(
+                                          color: AppColors.error,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -87,6 +96,7 @@ class _LoginviewState extends State<Loginview> {
                         child: Column(
                           children: [
                             _buildTextField(
+                              controller: _emailController,
                               labelText: "Enter your email",
                               obscureText: false,
                               validator: (value) {
@@ -98,6 +108,7 @@ class _LoginviewState extends State<Loginview> {
                             ),
                             const SizedBox(height: 15),
                             _buildTextField(
+                              controller: _passwordController,
                               labelText: "Enter your password",
                               obscureText: _obscurePassword,
                               validator: (value) {
@@ -111,7 +122,7 @@ class _LoginviewState extends State<Loginview> {
                                   _obscurePassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
-                                  color: Colors.black,
+                                  color: AppColors.textPrimary,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -130,7 +141,7 @@ class _LoginviewState extends State<Loginview> {
                           "Forgot Password?",
                           style: TextStyle(
                             fontFamily: "Inter",
-                            color: const Color(0xFFFA5804),
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -174,25 +185,27 @@ class _LoginviewState extends State<Loginview> {
   }
 
   Widget _buildTextField({
+    required TextEditingController controller,
     required String labelText,
     required bool obscureText,
     required String? Function(String?) validator,
     Widget? suffixIcon,
   }) {
     return TextFormField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.black),
+        labelStyle: const TextStyle(color: AppColors.textPrimary),
         filled: true,
-        fillColor: const Color(0xFFD9D9D9),
+        fillColor: AppColors.textFieldFill,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color(0xFFFA5804), width: 1.5),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         suffixIcon: suffixIcon,
       ),
@@ -206,7 +219,7 @@ class _LoginviewState extends State<Loginview> {
         widthFactor: 0.8,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFA5804),
+            backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -214,7 +227,46 @@ class _LoginviewState extends State<Loginview> {
           ),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              // Handle login logic here
+              final email = _emailController.text.trim();
+              final password = _passwordController.text.trim();
+
+              if (email == "admin" && password == "userAdmin") {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DashboardView(),
+                  ),
+                  (Route<dynamic> route) =>
+                      false, // This removes ALL previous routes
+                );
+                Flushbar(
+                  message: "Login successful!",
+                  messageColor: Colors.white,
+                  backgroundColor: AppColors.primary,
+                  duration: const Duration(seconds: 2),
+                  borderRadius: BorderRadius.circular(15),
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(20),
+                  flushbarPosition: FlushbarPosition.BOTTOM,
+                  animationDuration: const Duration(milliseconds: 800),
+                  forwardAnimationCurve: Curves.bounceInOut,
+                  icon: const Icon(Icons.check_circle, color: Colors.white),
+                ).show(context);
+              } else {
+                Flushbar(
+                  message: "Invalid credentials!",
+                  messageColor: Colors.white,
+                  backgroundColor: AppColors.error,
+                  duration: const Duration(seconds: 2),
+                  borderRadius: BorderRadius.circular(15),
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(20),
+                  flushbarPosition: FlushbarPosition.BOTTOM,
+                  animationDuration: const Duration(milliseconds: 800),
+                  forwardAnimationCurve: Curves.bounceInOut,
+                  icon: const Icon(Icons.error, color: Colors.white),
+                ).show(context);
+              }
             }
           },
           child: const Text(
@@ -251,7 +303,7 @@ class _LoginviewState extends State<Loginview> {
             child: const Text(
               "Sign up",
               style: TextStyle(
-                color: Color(0xFFFA5804),
+                color: AppColors.primary,
                 fontFamily: "Inter",
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
