@@ -9,7 +9,7 @@ class SelectionView extends StatefulWidget {
 }
 
 class _SelectionViewState extends State<SelectionView> {
-  String? selectedType; // 'provider' or 'customer'
+  String? selectedType;
 
   @override
   Widget build(BuildContext context) {
