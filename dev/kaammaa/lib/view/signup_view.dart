@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:kaammaa/constants/app_colors.dart';
+import 'package:kaammaa/constants/app_textfield.dart';
 import 'package:kaammaa/view/login_view.dart';
 
 class Signupview extends StatefulWidget {
@@ -14,6 +15,9 @@ class Signupview extends StatefulWidget {
 class _SignupviewState extends State<Signupview> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,25 +95,29 @@ class _SignupviewState extends State<Signupview> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          _buildTextField(
+                          buildTextField(
+                            controller: _usernameController,
                             labelText: "Enter your username",
                             validator:
                                 (value) =>
                                     value == null || value.isEmpty
                                         ? "Please enter your username"
                                         : null,
+                            obscureText: false,
                           ),
                           const SizedBox(height: 20),
-                          _buildTextField(
+                          buildTextField(
+                            controller: _emailController,
                             labelText: "Enter your email",
                             validator:
                                 (value) =>
                                     value == null || value.isEmpty
                                         ? "Please enter your email"
                                         : null,
+                            obscureText: false,
                           ),
                           const SizedBox(height: 15),
-                          _buildTextField(
+                          buildTextField(
                             labelText: "Enter your password",
                             obscureText: _obscurePassword,
                             validator:
@@ -128,6 +136,7 @@ class _SignupviewState extends State<Signupview> {
                                     () => _obscurePassword = !_obscurePassword,
                                   ),
                             ),
+                            controller: _passwordController,
                           ),
                           const SizedBox(height: 30),
                           Center(
@@ -190,32 +199,6 @@ class _SignupviewState extends State<Signupview> {
               ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required String labelText,
-    bool obscureText = false,
-    required String? Function(String?) validator,
-    Widget? suffixIcon,
-  }) {
-    return TextFormField(
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: labelText,
-        filled: true,
-        fillColor: const Color(0xFFD9D9D9),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(color: Color(0xFFFA5804), width: 1.5),
-        ),
-        suffixIcon: suffixIcon,
-      ),
-      validator: validator,
     );
   }
 
