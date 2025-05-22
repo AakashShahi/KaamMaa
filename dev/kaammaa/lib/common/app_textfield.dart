@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/constants/app_colors.dart';
+import 'package:kaammaa/common/app_colors.dart';
 
 Widget buildTextField({
   required TextEditingController controller,

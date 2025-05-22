@@ -188,7 +188,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: screenWidth * 0.06,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w900,
                   color: Colors.black,
                 ),
               ),

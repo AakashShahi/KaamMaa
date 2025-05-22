@@ -1,8 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:kaammaa/constants/app_colors.dart'; // NEW
-import 'package:kaammaa/constants/app_textfield.dart';
-import 'package:kaammaa/view/dashboard_view.dart';
+import 'package:kaammaa/common/app_colors.dart'; // NEW
+import 'package:kaammaa/common/app_textfield.dart';
+import 'package:kaammaa/view/worker/dashboard_view.dart';
 import 'package:kaammaa/view/signup_view.dart';
 
 class Loginview extends StatefulWidget {

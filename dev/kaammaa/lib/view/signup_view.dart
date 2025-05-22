@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:kaammaa/constants/app_colors.dart';
-import 'package:kaammaa/constants/app_textfield.dart';
+import 'package:kaammaa/common/app_colors.dart';
+import 'package:kaammaa/common/app_textfield.dart';
 import 'package:kaammaa/view/login_view.dart';
 
 class Signupview extends StatefulWidget {
@@ -166,28 +166,6 @@ class _SignupviewState extends State<Signupview> {
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 40),
-                          Center(
-                            child: Image.asset(
-                              "assets/images/continuewith.png",
-                              width: MediaQuery.of(context).size.width * 0.8,
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/logo/google.png",
-                                width: MediaQuery.of(context).size.width * 0.1,
-                              ),
-                              const SizedBox(width: 30),
-                              Image.asset(
-                                "assets/logo/fb.png",
-                                width: MediaQuery.of(context).size.width * 0.1,
-                              ),
-                            ],
                           ),
                           const SizedBox(height: 20),
                           _buildSignUpOption(context),
