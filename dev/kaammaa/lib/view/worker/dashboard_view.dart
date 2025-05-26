@@ -67,10 +67,7 @@ class _DashboardViewState extends State<DashboardView> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
-                  radius: 28,
-                  backgroundImage: AssetImage('assets/images/onboard1.jpg'),
-                ),
+                const CircleAvatar(radius: 28),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(

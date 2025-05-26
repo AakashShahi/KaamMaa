@@ -5,6 +5,6 @@ class SearchPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text("Search"));
+    return Scaffold(backgroundColor: Colors.pink, body: Text("Search"));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaammaa/common/app_colors.dart';
 import 'package:kaammaa/view/selection_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -68,12 +69,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFA5804),
                             padding: EdgeInsets.symmetric(
                               vertical: screenHeight * 0.02,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: Text(
@@ -105,7 +102,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: screenWidth * 0.04,
-                                fontFamily: 'Inter',
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -120,7 +116,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                               jumpScale: 1.5,
                               verticalOffset: screenWidth * 0.03,
                               dotColor: const Color(0xFFD3D3D3),
-                              activeDotColor: const Color(0xFFFA5804),
+                              activeDotColor: AppColors.primary,
                             ),
                           ),
                           ElevatedButton(
@@ -131,10 +127,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFA5804),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
                               padding: EdgeInsets.symmetric(
                                 vertical: screenHeight * 0.015,
                                 horizontal: screenWidth * 0.05,
@@ -143,8 +135,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                             child: Text(
                               "Next",
                               style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Inter',
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -186,7 +176,6 @@ class _OnboardingViewState extends State<OnboardingView> {
               Text(
                 title,
                 style: TextStyle(
-                  fontFamily: 'Inter',
                   fontSize: screenWidth * 0.06,
                   fontWeight: FontWeight.w900,
                   color: Colors.black,
@@ -196,7 +185,6 @@ class _OnboardingViewState extends State<OnboardingView> {
               Text(
                 description,
                 style: TextStyle(
-                  fontFamily: 'Inter',
                   fontSize: screenWidth * 0.04,
                   color: Colors.black87,
                 ),

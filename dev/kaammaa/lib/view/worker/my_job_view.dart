@@ -5,6 +5,6 @@ class MyJobView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text("My Job"));
+    return Scaffold(backgroundColor: Colors.blue, body: Text("My Job"));
   }
 }

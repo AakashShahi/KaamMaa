@@ -5,6 +5,6 @@ class ProfilePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text("Profile"));
+    return Scaffold(backgroundColor: Colors.yellow, body: Text("Profile"));
   }
 }
