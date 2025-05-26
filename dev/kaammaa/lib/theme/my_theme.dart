@@ -5,10 +5,6 @@ ThemeData getApplicationTheme() {
   return ThemeData(
     useMaterial3: false,
     scaffoldBackgroundColor: Colors.white,
-    appBarTheme: AppBarTheme(
-      elevation: 8,
-      backgroundColor: AppColors.secondary,
-    ),
     fontFamily: "Inter",
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
