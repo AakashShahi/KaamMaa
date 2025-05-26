@@ -90,7 +90,6 @@ class _SignupviewState extends State<Signupview> {
                             "Register to new account",
                             style: TextStyle(
                               fontSize: 24,
-                              fontFamily: "Inter",
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -144,10 +143,6 @@ class _SignupviewState extends State<Signupview> {
                               width: MediaQuery.of(context).size.width * 0.8,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFA5804),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 15,
                                   ),
@@ -197,7 +192,7 @@ class _SignupviewState extends State<Signupview> {
             child: const Text(
               "Sign in",
               style: TextStyle(
-                color: Color(0xFFFA5804),
+                color: AppColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
