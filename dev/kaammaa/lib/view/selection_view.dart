@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaammaa/common/app_colors.dart';
 import 'package:kaammaa/view/signup_view.dart';
 
 class SelectionView extends StatefulWidget {
@@ -9,7 +10,7 @@ class SelectionView extends StatefulWidget {
 }
 
 class _SelectionViewState extends State<SelectionView> {
-  String? selectedType; // 'provider' or 'customer'
+  String? selectedType;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,7 @@ class _SelectionViewState extends State<SelectionView> {
                       backgroundColor:
                           selectedType == null
                               ? Colors.grey
-                              : const Color(0xFFFA5804),
+                              : AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -145,16 +146,14 @@ class _SelectionViewState extends State<SelectionView> {
           boxShadow: [
             BoxShadow(
               color:
-                  selected
-                      ? const Color(0xFFFA5804).withAlpha(100)
-                      : Colors.black26,
+                  selected ? AppColors.primary.withAlpha(100) : Colors.black26,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: selected ? const Color(0xFFFA5804) : Colors.grey.shade300,
+            color: selected ? AppColors.primary : Colors.grey.shade300,
             width: selected ? 2.5 : 1.0,
           ),
         ),

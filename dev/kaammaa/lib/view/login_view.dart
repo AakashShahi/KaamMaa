@@ -1,7 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:kaammaa/constants/app_colors.dart'; // NEW
-import 'package:kaammaa/view/dashboard_view.dart';
+import 'package:kaammaa/common/app_colors.dart'; // NEW
+import 'package:kaammaa/common/app_textfield.dart';
+import 'package:kaammaa/view/worker/dashboard_view.dart';
 import 'package:kaammaa/view/signup_view.dart';
 
 class Loginview extends StatefulWidget {
@@ -56,7 +57,7 @@ class _LoginviewState extends State<Loginview> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            _buildTextField(
+                            buildTextField(
                               controller: _emailController,
                               labelText: "Enter your email",
                               obscureText: false,
@@ -68,7 +69,7 @@ class _LoginviewState extends State<Loginview> {
                               },
                             ),
                             const SizedBox(height: 15),
-                            _buildTextField(
+                            buildTextField(
                               controller: _passwordController,
                               labelText: "Enter your password",
                               obscureText: _obscurePassword,
@@ -142,35 +143,6 @@ class _LoginviewState extends State<Loginview> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    required bool obscureText,
-    required String? Function(String?) validator,
-    Widget? suffixIcon,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: const TextStyle(color: AppColors.textPrimary),
-        filled: true,
-        fillColor: AppColors.textFieldFill,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-        suffixIcon: suffixIcon,
-      ),
-      validator: validator,
     );
   }
 
