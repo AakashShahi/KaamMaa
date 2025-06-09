@@ -1,5 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/cubit/onboarding_cubit.dart';
 import 'package:kaammaa/view/onboarding_view.dart';
 import 'package:lottie/lottie.dart';
 
@@ -24,7 +26,7 @@ class SplashScreenView extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 20), // Spacing
+              const SizedBox(height: 20),
               Image.asset(
                 "assets/logo/kaammaa_txt.png",
                 width: screenWidth * 0.4,
@@ -34,9 +36,11 @@ class SplashScreenView extends StatelessWidget {
           ),
         ),
       ),
-      nextScreen: const OnboardingView(),
-      splashIconSize:
-          screenHeight, // Doesn't affect since we're customizing splash
+      nextScreen: BlocProvider(
+        create: (_) => OnboardingCubit(),
+        child: OnboardingView(),
+      ),
+      splashIconSize: screenHeight,
       backgroundColor: Colors.white,
       duration: 2500,
       splashTransition: SplashTransition.fadeTransition,

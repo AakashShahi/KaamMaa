@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/common/app_colors.dart';
+import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/view/signup_view.dart';
 
 class SelectionView extends StatefulWidget {

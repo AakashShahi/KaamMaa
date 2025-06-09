@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:kaammaa/common/app_colors.dart';
-import 'package:kaammaa/common/app_textfield.dart';
+import 'package:kaammaa/core/common/app_colors.dart';
+import 'package:kaammaa/core/common/app_textfield.dart';
 import 'package:kaammaa/view/login_view.dart';
 
 class Signupview extends StatefulWidget {

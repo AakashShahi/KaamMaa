@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/common/app_colors.dart';
+import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/view/worker/home_page_view.dart';
 import 'package:kaammaa/view/worker/my_job_view.dart';
 import 'package:kaammaa/view/worker/profile_page_view.dart';
