@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/core/common/app_colors.dart';
-import 'package:kaammaa/cubit/onboarding_cubit.dart';
-import 'package:kaammaa/state/onboarding_state.dart';
+import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
+import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_state.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends StatelessWidget {
@@ -11,7 +11,7 @@ class OnboardingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OnboardingCubit(),
+      create: (_) => OnboardingViewModel(),
       child: const _OnboardingViewContent(),
     );
   }
@@ -22,9 +22,9 @@ class _OnboardingViewContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<OnboardingCubit>();
+    final cubit = context.read<OnboardingViewModel>();
 
-    return BlocBuilder<OnboardingCubit, OnboardingState>(
+    return BlocBuilder<OnboardingViewModel, OnboardingState>(
       builder: (context, state) {
         if (state is OnboardingInProgress) {
           return Scaffold(

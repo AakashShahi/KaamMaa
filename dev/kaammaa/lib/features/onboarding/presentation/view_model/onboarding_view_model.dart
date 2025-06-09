@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:kaammaa/state/onboarding_state.dart';
+import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_state.dart';
 import 'package:kaammaa/view/selection_view.dart';
 
-class OnboardingCubit extends Cubit<OnboardingState> {
+class OnboardingViewModel extends Cubit<OnboardingState> {
   static const int _totalPages = 3;
   final PageController pageController = PageController();
 
-  OnboardingCubit()
+  OnboardingViewModel()
     : super(const OnboardingInProgress(currentPage: 0, isLastPage: false));
 
   void pageChanged(int index) {
