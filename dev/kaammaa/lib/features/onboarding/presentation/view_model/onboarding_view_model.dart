@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:kaammaa/app/service_locater/service_locater.dart';
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_state.dart';
-import 'package:kaammaa/view/selection_view.dart';
+import 'package:kaammaa/features/selection/presentation/view/selection_view.dart';
+import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
 
 class OnboardingViewModel extends Cubit<OnboardingState> {
   static const int _totalPages = 3;
@@ -38,7 +40,13 @@ class OnboardingViewModel extends Cubit<OnboardingState> {
     emit(OnboardingCompleted());
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const SelectionView()),
+      MaterialPageRoute(
+        builder:
+            (_) => BlocProvider.value(
+              value: serviceLocater<SelectionViewModel>(),
+              child: SelectionView(),
+            ),
+      ),
     );
   }
 

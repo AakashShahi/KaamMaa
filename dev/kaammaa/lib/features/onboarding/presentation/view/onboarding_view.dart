@@ -64,20 +64,39 @@ class _OnboardingViewContent extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child:
                         state.isLastPage
-                            ? ElevatedButton(
-                              onPressed: () {
-                                cubit.completeOnboarding(context);
-                              },
-                              child: const Text('Get Started'),
+                            ? SizedBox(
+                              width: double.infinity,
+                              height: 55,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  cubit.completeOnboarding(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Get Started',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
                             )
                             : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TextButton(
-                                  onPressed: cubit.skipToLastPage,
-                                  child: const Text(
-                                    "Skip",
-                                    style: TextStyle(color: Colors.black),
+                                SizedBox(
+                                  height: 45,
+                                  child: TextButton(
+                                    onPressed: cubit.skipToLastPage,
+                                    child: const Text(
+                                      "Skip",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 SmoothPageIndicator(
@@ -90,9 +109,24 @@ class _OnboardingViewContent extends StatelessWidget {
                                     dotColor: Colors.grey,
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: cubit.nextPage,
-                                  child: const Text("Next"),
+                                SizedBox(
+                                  height: 45,
+                                  child: ElevatedButton(
+                                    onPressed: cubit.nextPage,
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      backgroundColor: AppColors.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      "Next",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
