@@ -1,9 +1,9 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kaammaa/core/common/app_colors.dart'; // NEW
+import 'package:kaammaa/core/common/app_flushbar.dart';
 import 'package:kaammaa/core/common/app_textfield.dart';
 import 'package:kaammaa/view/worker/dashboard_view.dart';
-import 'package:kaammaa/view/signup_view.dart';
+import 'package:kaammaa/features/auth/presentation/view/signup_view.dart';
 
 class Loginview extends StatefulWidget {
   const Loginview({super.key});
@@ -172,33 +172,19 @@ class _LoginviewState extends State<Loginview> {
                   (Route<dynamic> route) =>
                       false, // This removes ALL previous routes
                 );
-                Flushbar(
+                AppFlushbar.show(
+                  context: context,
                   message: "Login successful!",
-                  messageColor: Colors.white,
                   backgroundColor: AppColors.primary,
-                  duration: const Duration(seconds: 2),
-                  borderRadius: BorderRadius.circular(15),
-                  margin: const EdgeInsets.all(12),
-                  padding: const EdgeInsets.all(20),
-                  flushbarPosition: FlushbarPosition.BOTTOM,
-                  animationDuration: const Duration(milliseconds: 800),
-                  forwardAnimationCurve: Curves.bounceInOut,
                   icon: const Icon(Icons.check_circle, color: Colors.white),
-                ).show(context);
+                );
               } else {
-                Flushbar(
+                AppFlushbar.show(
+                  context: context,
                   message: "Invalid credentials!",
-                  messageColor: Colors.white,
                   backgroundColor: AppColors.error,
-                  duration: const Duration(seconds: 2),
-                  borderRadius: BorderRadius.circular(15),
-                  margin: const EdgeInsets.all(12),
-                  padding: const EdgeInsets.all(20),
-                  flushbarPosition: FlushbarPosition.BOTTOM,
-                  animationDuration: const Duration(milliseconds: 800),
-                  forwardAnimationCurve: Curves.bounceInOut,
                   icon: const Icon(Icons.error, color: Colors.white),
-                ).show(context);
+                );
               }
             }
           },
@@ -230,7 +216,7 @@ class _LoginviewState extends State<Loginview> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Signupview()),
+                MaterialPageRoute(builder: (context) => Signupview()),
               );
             },
             child: const Text(

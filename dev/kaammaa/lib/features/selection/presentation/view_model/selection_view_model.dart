@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/app/service_locater/service_locater.dart';
+import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_state.dart';
-import 'package:kaammaa/view/signup_view.dart';
+import 'package:kaammaa/features/auth/presentation/view/signup_view.dart';
 
 class SelectionViewModel extends Cubit<SelectionState> {
   SelectionViewModel() : super(const SelectionState());
@@ -17,7 +19,12 @@ class SelectionViewModel extends Cubit<SelectionState> {
       context,
       MaterialPageRoute(
         builder:
-            (context) => const Signupview(), // Or pass selectedType if needed
+            (_) => BlocProvider.value(
+              value: serviceLocater<SignupViewModel>(),
+              child: Signupview(
+                role: state.selectedType.toString().toLowerCase(),
+              ),
+            ),
       ),
     );
   }
