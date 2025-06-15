@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 class AppFlushbar {
-  static void show({
+  static Future<void> show({
     required BuildContext context,
     required String message,
     required Color backgroundColor,
     required Icon icon,
     Duration duration = const Duration(seconds: 2),
   }) {
-    Flushbar(
+    return Flushbar(
       message: message,
       messageColor: Colors.white,
       backgroundColor: backgroundColor,

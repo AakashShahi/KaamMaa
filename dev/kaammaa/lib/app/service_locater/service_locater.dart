@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
@@ -22,9 +23,10 @@ Future _initOnBoardingModule() async {
 }
 
 Future _initSelectionModule() async {
-  serviceLocater.registerFactory(() => SelectionViewModel());
+  serviceLocater.registerLazySingleton(() => SelectionViewModel());
 }
 
 Future _initAuthModule() async {
-  serviceLocater.registerFactory(() => SignupViewModel());
+  serviceLocater.registerLazySingleton(() => SignupViewModel());
+  serviceLocater.registerLazySingleton(() => LoginViewModel());
 }

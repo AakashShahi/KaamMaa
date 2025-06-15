@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/app/service_locater/service_locater.dart';
 import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_state.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
@@ -16,7 +17,7 @@ class SelectionView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: BlocProvider(
-          create: (_) => SelectionViewModel(),
+          create: (_) => serviceLocater<SelectionViewModel>(),
           child: BlocBuilder<SelectionViewModel, SelectionState>(
             builder: (context, state) {
               return SingleChildScrollView(

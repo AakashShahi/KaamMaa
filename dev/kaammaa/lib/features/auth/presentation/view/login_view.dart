@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kaammaa/core/common/app_colors.dart'; // NEW
-import 'package:kaammaa/core/common/app_flushbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/app/service_locater/service_locater.dart';
+import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/core/common/app_textfield.dart';
-import 'package:kaammaa/view/worker/dashboard_view.dart';
-import 'package:kaammaa/features/auth/presentation/view/signup_view.dart';
+import 'package:kaammaa/core/common/kaammaa_loading_overlay.dart'; // <-- Import loading overlay here
+import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_event.dart';
+import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_state.dart';
+import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 
 class Loginview extends StatefulWidget {
   const Loginview({super.key});
@@ -22,131 +25,156 @@ class _LoginviewState extends State<Loginview> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(15),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Image.asset(
-                          "assets/logo/backlogo.png",
-                          height: 40,
-                          width: 40,
-                        ),
+    return BlocProvider(
+      create: (_) => serviceLocater<LoginViewModel>(),
+      child: BlocBuilder<LoginViewModel, LoginState>(
+        builder: (context, state) {
+          final loginBloc = context.read<LoginViewModel>();
+
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            body: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.all(15),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Login to your account",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            buildTextField(
-                              controller: _emailController,
-                              labelText: "Enter your email",
-                              obscureText: false,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your email";
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 15),
-                            buildTextField(
-                              controller: _passwordController,
-                              labelText: "Enter your password",
-                              obscureText: _obscurePassword,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your password";
-                                }
-                                return null;
-                              },
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: AppColors.textPrimary,
+                      child: IntrinsicHeight(
+                        child: KaammaaLoadingOverlay(
+                          // <-- Wrap with loading overlay here
+                          isLoading: state.isLoading,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                onPressed:
+                                    () => loginBloc.add(
+                                      NavigateToSignUpViewEvent(
+                                        context: context,
+                                      ),
+                                    ),
+                                icon: Image.asset(
+                                  "assets/logo/backlogo.png",
+                                  height: 40,
+                                  width: 40,
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            fontFamily: "Inter",
-                            color: AppColors.primary,
+                              const SizedBox(height: 20),
+                              const Text(
+                                "Login to your account",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    buildTextField(
+                                      controller: _emailController,
+                                      labelText: "Enter your email or username",
+                                      obscureText: false,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please enter your email or username";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 15),
+                                    buildTextField(
+                                      controller: _passwordController,
+                                      labelText: "Enter your password",
+                                      obscureText: _obscurePassword,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please enter your password";
+                                        }
+                                        return null;
+                                      },
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          _obscurePassword
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscurePassword =
+                                                !_obscurePassword;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  "Forgot Password?",
+                                  style: TextStyle(
+                                    fontFamily: "Inter",
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              _buildSignInButton(context, loginBloc, state),
+                              const SizedBox(height: 40),
+                              Center(
+                                child: Image.asset(
+                                  "assets/images/continuewith.png",
+                                  width: size.width * 0.8,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              const SizedBox(height: 40),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/logo/google.png",
+                                    width: size.width * 0.1,
+                                  ),
+                                  SizedBox(width: size.width * 0.1),
+                                  Image.asset(
+                                    "assets/logo/fb.png",
+                                    width: size.width * 0.1,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              _buildSignUpOption(context, loginBloc),
+                              const Spacer(),
+                            ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
-                      _buildSignInButton(size),
-                      const SizedBox(height: 40),
-                      Center(
-                        child: Image.asset(
-                          "assets/images/continuewith.png",
-                          width: size.width * 0.8,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/logo/google.png",
-                            width: size.width * 0.1,
-                          ),
-                          SizedBox(width: size.width * 0.1),
-                          Image.asset(
-                            "assets/logo/fb.png",
-                            width: size.width * 0.1,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      _buildSignUpOption(),
-                      const Spacer(),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildSignInButton(Size size) {
+  Widget _buildSignInButton(
+    BuildContext context,
+    LoginViewModel bloc,
+    LoginState state,
+  ) {
     return Center(
       child: FractionallySizedBox(
         widthFactor: 0.8,
@@ -158,36 +186,20 @@ class _LoginviewState extends State<Loginview> {
             ),
             padding: const EdgeInsets.symmetric(vertical: 15),
           ),
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final email = _emailController.text.trim();
-              final password = _passwordController.text.trim();
-
-              if (email == "admin" && password == "userAdmin") {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DashboardView(),
-                  ),
-                  (Route<dynamic> route) =>
-                      false, // This removes ALL previous routes
-                );
-                AppFlushbar.show(
-                  context: context,
-                  message: "Login successful!",
-                  backgroundColor: AppColors.primary,
-                  icon: const Icon(Icons.check_circle, color: Colors.white),
-                );
-              } else {
-                AppFlushbar.show(
-                  context: context,
-                  message: "Invalid credentials!",
-                  backgroundColor: AppColors.error,
-                  icon: const Icon(Icons.error, color: Colors.white),
-                );
-              }
-            }
-          },
+          onPressed:
+              state.isLoading
+                  ? null
+                  : () {
+                    if (_formKey.currentState!.validate()) {
+                      bloc.add(
+                        LoginWithEmailAndPasswordEvent(
+                          context: context,
+                          username: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        ),
+                      );
+                    }
+                  },
           child: const Text(
             "Sign-In",
             style: TextStyle(
@@ -201,7 +213,7 @@ class _LoginviewState extends State<Loginview> {
     );
   }
 
-  Widget _buildSignUpOption() {
+  Widget _buildSignUpOption(BuildContext context, LoginViewModel bloc) {
     return Center(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -214,10 +226,7 @@ class _LoginviewState extends State<Loginview> {
           const SizedBox(width: 5),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Signupview()),
-              );
+              bloc.add(NavigateToSignUpViewEvent(context: context));
             },
             child: const Text(
               "Sign up",

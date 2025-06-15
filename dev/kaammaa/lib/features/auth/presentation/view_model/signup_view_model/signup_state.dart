@@ -8,7 +8,7 @@ class SignupState extends Equatable {
 
   const SignupState.initial() : isLoading = false, isSuccess = false;
 
-  SignupState copyWith({bool? isLoading, bool? isSuccess}) {
+  SignupState copyWith({bool? isLoading, bool? isSuccess, String? role}) {
     return SignupState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,

@@ -19,11 +19,12 @@ class SelectionViewModel extends Cubit<SelectionState> {
       context,
       MaterialPageRoute(
         builder:
-            (_) => BlocProvider.value(
-              value: serviceLocater<SignupViewModel>(),
-              child: Signupview(
-                role: state.selectedType.toString().toLowerCase(),
-              ),
+            (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: serviceLocater<SignupViewModel>()),
+                BlocProvider.value(value: serviceLocater<SelectionViewModel>()),
+              ],
+              child: Signupview(),
             ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomePageView extends StatefulWidget {
@@ -13,7 +14,7 @@ class _HomePageViewState extends State<HomePageView> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  final Color primaryColor = const Color(0xFFFA5804);
+  final Color primaryColor = AppColors.primary;
   final List<DateTime> upcomingJobDates = [DateTime(2025, 6, 3)];
   CalendarFormat _calendarFormat = CalendarFormat.week;
 
@@ -65,7 +66,7 @@ class _HomePageViewState extends State<HomePageView> {
                 },
                 calendarStyle: CalendarStyle(
                   todayDecoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.3),
+                    color: const Color(0x4DFA5804),
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: BoxDecoration(
