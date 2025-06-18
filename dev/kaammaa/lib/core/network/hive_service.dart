@@ -7,7 +7,7 @@ class HiveService {
   Future<void> init() async {
     // Initialize the database
     var directory = await getApplicationDocumentsDirectory();
-    var path = '${directory.path}student_management.db';
+    var path = '${directory.path}kaam_maa.db';
 
     Hive.init(path);
 
