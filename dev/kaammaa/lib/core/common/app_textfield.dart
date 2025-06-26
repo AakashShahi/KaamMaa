@@ -7,10 +7,12 @@ Widget buildTextField({
   required bool obscureText,
   required String? Function(String?) validator,
   Widget? suffixIcon,
+  TextInputType keyboardType = TextInputType.text,
 }) {
   return TextFormField(
     controller: controller,
     obscureText: obscureText,
+    keyboardType: keyboardType,
     decoration: InputDecoration(
       labelText: labelText,
       labelStyle: const TextStyle(color: AppColors.textPrimary),

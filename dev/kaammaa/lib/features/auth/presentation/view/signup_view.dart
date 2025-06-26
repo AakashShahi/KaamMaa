@@ -16,6 +16,7 @@ class Signupview extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final ValueNotifier<bool> _obscurePassword = ValueNotifier(true);
 
   @override
@@ -110,7 +111,7 @@ class Signupview extends StatelessWidget {
                                                 : null,
                                     obscureText: false,
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 15),
                                   buildTextField(
                                     controller: _emailController,
                                     labelText: "Enter your email",
@@ -119,6 +120,21 @@ class Signupview extends StatelessWidget {
                                             value == null || value.isEmpty
                                                 ? "Please enter your email"
                                                 : null,
+                                    obscureText: false,
+                                  ),
+                                  const SizedBox(height: 15),
+                                  buildTextField(
+                                    controller: _phoneController,
+                                    labelText: "Enter your phone number",
+                                    keyboardType: TextInputType.phone,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Please enter your phone number";
+                                      } else if (value.length < 7) {
+                                        return "Invalid phone number";
+                                      }
+                                      return null;
+                                    },
                                     obscureText: false,
                                   ),
                                   const SizedBox(height: 15),
@@ -174,13 +190,16 @@ class Signupview extends StatelessWidget {
                                                 password:
                                                     _passwordController.text
                                                         .trim(),
+                                                phone:
+                                                    _phoneController.text
+                                                        .trim(),
                                                 role: role,
-                                                phone: "9878657898",
                                               ),
                                             );
                                             _usernameController.clear();
                                             _emailController.clear();
                                             _passwordController.clear();
+                                            _phoneController.clear();
                                           }
                                         },
                                         child: const Text(
