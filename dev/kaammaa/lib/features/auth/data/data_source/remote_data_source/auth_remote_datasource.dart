@@ -12,9 +12,33 @@ class AuthRemoteDatasource implements IAuthDataSource {
     : _apiService = apiservice;
 
   @override
-  Future<String> loginUser(String identifier, String password) {
-    // TODO: implement loginUser
-    throw UnimplementedError();
+  Future<String> loginUser(String identifier, String password) async {
+    try {
+      final isEmail = RegExp(
+        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+      ).hasMatch(identifier.trim());
+
+      final loginData =
+          isEmail
+              ? {"email": identifier.trim(), "password": password}
+              : {"username": identifier.trim(), "password": password};
+
+      final response = await _apiService.dio.post(
+        ApiEndpoints.login,
+        data: loginData,
+      );
+
+      if (response.statusCode == 200) {
+        print(" Login success: ${response.data}");
+        return response.data["token"];
+      } else {
+        throw Exception("Failed to login: ${response.statusMessage}");
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to login: ${e.response?.data ?? e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
   }
 
   @override
