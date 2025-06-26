@@ -5,14 +5,14 @@ import 'package:kaammaa/view/worker/my_job_view.dart';
 import 'package:kaammaa/view/worker/profile_page_view.dart';
 import 'package:kaammaa/view/worker/search_page_view.dart';
 
-class DashboardView extends StatefulWidget {
-  const DashboardView({super.key});
+class WorkerDashboardView extends StatefulWidget {
+  const WorkerDashboardView({super.key});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
+  State<WorkerDashboardView> createState() => _WorkerDashboardViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
+class _WorkerDashboardViewState extends State<WorkerDashboardView> {
   int myIndex = 0;
 
   String _getGreeting() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/app/service_locater/service_locater.dart';
+import 'package:kaammaa/app/shared_pref/token_shared_prefs.dart';
 import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/core/common/app_flushbar.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
@@ -8,12 +9,15 @@ import 'package:kaammaa/features/auth/presentation/view/signup_view.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_event.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
+import 'package:kaammaa/features/customer/customer_dashboard/presentation/view/customer_dashboard_view.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
-import 'package:kaammaa/view/worker/dashboard_view.dart';
+import 'package:kaammaa/view/worker/worker_dashboard_view.dart';
 
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
   final AuthLoginUsecase _authLoginUsecase;
-  LoginViewModel(this._authLoginUsecase) : super(const LoginState.initial()) {
+  final TokenSharedPrefs _tokenSharedPrefs;
+  LoginViewModel(this._authLoginUsecase, this._tokenSharedPrefs)
+    : super(const LoginState.initial()) {
     on<LoginWithEmailAndPasswordEvent>(_onLogin);
     on<NavigateToSignUpViewEvent>(_onNavigateToSignUp);
     on<NavigateToDashBoardViewEvent>(_onNavigateToDashboard);
@@ -72,16 +76,39 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     NavigateToDashBoardViewEvent event,
     Emitter<LoginState> emit,
   ) async {
-    Navigator.pushAndRemoveUntil(
-      event.context,
-      MaterialPageRoute(builder: (_) => const DashboardView()),
-      (route) => false,
-    );
-    await AppFlushbar.show(
-      context: event.context,
-      message: "Login successful!",
-      backgroundColor: AppColors.primary,
-      icon: const Icon(Icons.check_circle, color: Colors.white),
+    final roleResult = await _tokenSharedPrefs.getRole();
+
+    roleResult.fold(
+      (failure) async {
+        await AppFlushbar.show(
+          context: event.context,
+          message: "Failed to load user role",
+          backgroundColor: AppColors.error,
+          icon: const Icon(Icons.error, color: Colors.white),
+        );
+      },
+      (role) async {
+        if (role == "worker") {
+          Navigator.pushAndRemoveUntil(
+            event.context,
+            MaterialPageRoute(builder: (_) => const WorkerDashboardView()),
+            (route) => false,
+          );
+        } else {
+          Navigator.pushAndRemoveUntil(
+            event.context,
+            MaterialPageRoute(builder: (_) => const CustomerDashboardView()),
+            (route) => false,
+          );
+        }
+
+        await AppFlushbar.show(
+          context: event.context,
+          message: "Login successful!",
+          backgroundColor: AppColors.primary,
+          icon: const Icon(Icons.check_circle, color: Colors.white),
+        );
+      },
     );
   }
 }
