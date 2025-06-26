@@ -175,6 +175,7 @@ class Signupview extends StatelessWidget {
                                                     _passwordController.text
                                                         .trim(),
                                                 role: role,
+                                                phone: "9878657898",
                                               ),
                                             );
                                             _usernameController.clear();

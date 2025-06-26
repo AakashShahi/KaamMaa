@@ -15,7 +15,7 @@ class AuthEntity extends Equatable {
   final String? availability;
   final File? certificateUrl;
   final String? isVerified;
-  final String? phone;
+  final String phone; // <-- made required
 
   const AuthEntity({
     this.userId,
@@ -23,12 +23,12 @@ class AuthEntity extends Equatable {
     required this.email,
     required this.password,
     required this.role,
+    required this.phone, // <-- required here
     this.name,
     this.skills,
     this.availability,
     this.certificateUrl,
     this.isVerified,
-    this.phone,
     this.profession,
     this.location,
   });
@@ -40,12 +40,12 @@ class AuthEntity extends Equatable {
     email,
     password,
     role,
+    phone,
     name,
     skills,
     availability,
     certificateUrl,
     isVerified,
-    phone,
     profession,
     location,
   ];

@@ -39,6 +39,7 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
         username: event.username,
         password: event.password,
         role: event.role,
+        phone: event.phone,
       ),
     );
 
