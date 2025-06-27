@@ -44,4 +44,21 @@ class TokenSharedPrefs {
       return Left(SharedPreferenceFailure(message: e.toString()));
     }
   }
+
+  //Logout
+  Future<Either<Failure, void>> logout() async {
+    try {
+      await _sharedPreferences.remove('token');
+      await _sharedPreferences.remove('role');
+      return const Right(null);
+    } catch (e) {
+      return Left(SharedPreferenceFailure(message: e.toString()));
+    }
+  }
+
+  // (Optional) Check if user is logged in
+  Future<bool> isLoggedIn() async {
+    final token = _sharedPreferences.getString('token');
+    return token != null && token.isNotEmpty;
+  }
 }

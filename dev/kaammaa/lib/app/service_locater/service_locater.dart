@@ -11,9 +11,11 @@ import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_register_usecase.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
+import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_view_model.dart';
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
 import 'package:kaammaa/features/splash/presentation/view_model/splash_view_model.dart';
+import 'package:kaammaa/features/worker/worker_dashboard/presentation/view_model/worker_dashboard_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final serviceLocater = GetIt.instance;
@@ -26,6 +28,12 @@ Future initDependencies() async {
   await _initOnBoardingModule();
   await _initSelectionModule();
   await _initAuthModule();
+
+  //Worker Dashboard Module
+  await _initWorkerDashboardModule();
+
+  //Customer Dashboard Module
+  await _initCustomerDashboardModule();
 }
 
 Future<void> _initApiService() async {
@@ -105,4 +113,14 @@ Future _initAuthModule() async {
       serviceLocater<TokenSharedPrefs>(),
     ),
   );
+}
+
+//Worker Dashboard Module
+Future<void> _initWorkerDashboardModule() async {
+  serviceLocater.registerLazySingleton(() => WorkerDashboardViewModel());
+}
+
+//Customer Dashboard Module
+Future<void> _initCustomerDashboardModule() async {
+  serviceLocater.registerLazySingleton(() => CustomerDashboardViewModel());
 }
