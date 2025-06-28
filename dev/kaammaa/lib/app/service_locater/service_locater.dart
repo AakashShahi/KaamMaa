@@ -18,7 +18,9 @@ import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_m
 import 'package:kaammaa/features/customer/customer_jobs/data/data_source/remote_data_source.dart/customer_jobs_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/repository/remote_respository/customer_jobs_remote_repository.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_all_public_jobs_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/post_public_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
 import 'package:kaammaa/features/splash/presentation/view_model/splash_view_model.dart';
@@ -167,6 +169,20 @@ Future<void> _initCustomerJobsModule() async {
   serviceLocater.registerLazySingleton(
     () =>
         CustomerPostedJobsViewModel(serviceLocater<GetAllPublicJobsUsecase>()),
+  );
+
+  serviceLocater.registerFactory(
+    () => PostPublicJobUsecase(
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerLazySingleton(
+    () => CustomerPostJobsViewModel(
+      postPublicJobUsecase: serviceLocater<PostPublicJobUsecase>(),
+      getCategoriesUsecase: serviceLocater<GetAllCustomerCategoryUsecase>(),
+    ),
   );
 }
 

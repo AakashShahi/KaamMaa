@@ -3,7 +3,7 @@ import 'package:kaammaa/features/customer/customer_category/domain/entity/custom
 
 class CustomerJobsEntity extends Equatable {
   final String? jobId;
-  final String postedBy;
+  final String? postedBy;
   final String? assignedTo;
   final CustomerCategoryEntity category;
   final String? icon;
@@ -18,7 +18,7 @@ class CustomerJobsEntity extends Equatable {
 
   const CustomerJobsEntity({
     this.jobId,
-    required this.postedBy,
+    this.postedBy,
     this.assignedTo,
     required this.category,
     this.icon,

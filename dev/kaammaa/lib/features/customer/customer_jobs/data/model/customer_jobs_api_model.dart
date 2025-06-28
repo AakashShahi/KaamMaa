@@ -9,7 +9,7 @@ part 'customer_jobs_api_model.g.dart';
 class CustomerJobsApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? jobId;
-  final String postedBy;
+  final String? postedBy;
   final String? assignedTo;
   final CustomerCategoryApiModel category;
   final String? icon;

@@ -23,4 +23,17 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> postJob(
+    String? token,
+    CustomerJobsEntity customerJobsEntity,
+  ) async {
+    try {
+      await _remoteDatasource.postJob(token, customerJobsEntity);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: "Failed to post job: ${e.toString()}"));
+    }
+  }
 }

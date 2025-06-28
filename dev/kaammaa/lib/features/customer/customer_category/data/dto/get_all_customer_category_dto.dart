@@ -6,7 +6,7 @@ part 'get_all_customer_category_dto.g.dart';
 @JsonSerializable()
 class GetAllCustomerCategoryDto {
   final bool success;
-  final int count;
+  final int? count;
   final List<CustomerCategoryApiModel> data;
 
   const GetAllCustomerCategoryDto({

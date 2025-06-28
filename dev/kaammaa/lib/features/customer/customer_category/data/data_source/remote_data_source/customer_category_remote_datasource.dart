@@ -21,6 +21,7 @@ class CustomerCategoryRemoteDatasource implements ICustomerCategoryDataSource {
         '${ApiEndpoints.customerCategory}/',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
+      print('Response Customer Category: ${response.data}');
       if (response.statusCode == 200) {
         GetAllCustomerCategoryDto getAllCustomerCategoryDto =
             GetAllCustomerCategoryDto.fromJson(response.data);
@@ -30,11 +31,13 @@ class CustomerCategoryRemoteDatasource implements ICustomerCategoryDataSource {
         );
       } else {
         // Handle unexpected status codes
-        throw Exception('Failed to fetch batches: ${response.statusMessage}');
+        throw Exception(
+          'Failed to fetch categories: ${response.statusMessage}',
+        );
       }
     } on DioException catch (e) {
       // Handle DioException
-      throw Exception('Failed to fetch batches: ${e.message}');
+      throw Exception('Failed to fetch categories: ${e.message}');
     } catch (e) {
       // Handle other exceptions
       throw Exception('An unexpected error occurred: $e');

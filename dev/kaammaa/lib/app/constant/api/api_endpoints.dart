@@ -10,6 +10,7 @@ class ApiEndpoints {
 
   // For mobile devices
   static const String serverAddress = "http://192.168.1.70:5050/api/";
+  static const String imageUrl = "http://192.168.1.70:5050/";
 
   //Auth
   static const String login = "auth/login";
@@ -20,4 +21,5 @@ class ApiEndpoints {
 
   // Customer Jobs
   static const String customerPublicJobs = "customer/jobs/open";
+  static const String postCustomerJob = "customer/jobs";
 }

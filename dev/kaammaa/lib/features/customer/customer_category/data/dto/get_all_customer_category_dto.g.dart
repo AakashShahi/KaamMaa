@@ -10,7 +10,7 @@ GetAllCustomerCategoryDto _$GetAllCustomerCategoryDtoFromJson(
         Map<String, dynamic> json) =>
     GetAllCustomerCategoryDto(
       success: json['success'] as bool,
-      count: (json['count'] as num).toInt(),
+      count: (json['count'] as num?)?.toInt(),
       data: (json['data'] as List<dynamic>)
           .map((e) =>
               CustomerCategoryApiModel.fromJson(e as Map<String, dynamic>))
