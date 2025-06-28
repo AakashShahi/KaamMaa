@@ -14,4 +14,10 @@ class ApiEndpoints {
   //Auth
   static const String login = "auth/login";
   static const String register = "auth/register";
+
+  // Customer Category
+  static const String customerCategory = "customer/profession";
+
+  // Customer Jobs
+  static const String customerPublicJobs = "customer/jobs/open";
 }
