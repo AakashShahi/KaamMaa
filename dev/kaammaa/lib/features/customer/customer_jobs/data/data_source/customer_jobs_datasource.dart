@@ -4,4 +4,6 @@ abstract interface class ICustomerJobsDatasource {
   Future<List<CustomerJobsEntity>> getPublicJobs(String? token);
 
   Future<void> postJob(String? token, CustomerJobsEntity customerJobsEntity);
+
+  Future<void> assignWorkerToJob(String? token, String jobId, String workerId);
 }

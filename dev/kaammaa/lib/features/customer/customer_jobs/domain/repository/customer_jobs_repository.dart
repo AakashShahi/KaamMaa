@@ -11,4 +11,10 @@ abstract interface class ICustomerJobsRepository {
     String? token,
     CustomerJobsEntity customerJobsEntity,
   );
+
+  Future<Either<Failure, void>> assignWorkerToJob(
+    String? token,
+    String jobId,
+    String workerId,
+  );
 }

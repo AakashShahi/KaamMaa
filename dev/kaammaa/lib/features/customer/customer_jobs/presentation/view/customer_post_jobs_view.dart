@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/features/customer/customer_category/domain/entity/customer_category_entity.dart';
+import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_event.dart';
+import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_view_model.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_state.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
@@ -70,10 +72,13 @@ class _CustomerPostJobsViewState extends State<CustomerPostJobsView> {
         date: date,
         time: time,
         context: context,
+        onSuccess: () {
+          context.read<CustomerDashboardViewModel>().add(
+            ChangeCustomerTabEvent(newIndex: 1),
+          );
+        },
       ),
     );
-
-    // Clear fields optimistically (optional: move to Bloc success state if you want)
     descriptionController.clear();
     locationController.clear();
     setState(() {

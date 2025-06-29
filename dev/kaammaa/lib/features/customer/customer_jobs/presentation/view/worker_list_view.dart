@@ -43,6 +43,68 @@ class _WorkerListViewState extends State<WorkerListView> {
     }
   }
 
+  Future<void> showAssignWorkerDialog({
+    required BuildContext context,
+    required String workerName,
+    required String jobId,
+    required String workerId,
+  }) async {
+    await showDialog(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            contentPadding: const EdgeInsets.all(20),
+            title: Column(
+              children: [
+                Image.asset('assets/logo/kaammaa.png', height: 80),
+                const SizedBox(height: 12),
+                Text(
+                  'Confirm Assignment',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+            content: Text(
+              'Are you sure you want to assign $workerName to this job?',
+              style: const TextStyle(fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                child: const Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                ),
+                child: const Text("Confirm"),
+                onPressed: () {
+                  Navigator.of(ctx).pop(); // Close the dialog
+
+                  context.read<CustomerWorkerListViewModel>().add(
+                    AssignWorkerToJob(
+                      jobId: jobId,
+                      workerId: workerId,
+                      context: context,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +133,6 @@ class _WorkerListViewState extends State<WorkerListView> {
               itemCount: workers.length,
               itemBuilder: (context, index) {
                 final worker = workers[index];
-                final isVerified = worker.isVerified;
                 final imageUrl =
                     worker.profilePic != null
                         ? getBackendImageUrl(worker.profilePic!)
@@ -90,7 +151,6 @@ class _WorkerListViewState extends State<WorkerListView> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Avatar using getBackendImageUrl
                             ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: SizedBox(
@@ -125,13 +185,10 @@ class _WorkerListViewState extends State<WorkerListView> {
                               ),
                             ),
                             const SizedBox(width: 16),
-
-                            // Worker Info
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Name
                                   Row(
                                     children: [
                                       const Icon(Icons.person, size: 18),
@@ -148,8 +205,6 @@ class _WorkerListViewState extends State<WorkerListView> {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-
-                                  // Location
                                   Row(
                                     children: [
                                       const Icon(Icons.location_on, size: 18),
@@ -163,8 +218,20 @@ class _WorkerListViewState extends State<WorkerListView> {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-
-                                  // Phone (no call button here anymore)
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.work, size: 18),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        worker.profession.categoryName ??
+                                            "No Profession",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
                                   Row(
                                     children: [
                                       const Icon(Icons.phone, size: 18),
@@ -178,28 +245,26 @@ class _WorkerListViewState extends State<WorkerListView> {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-
-                                  // Verification
                                   Row(
                                     children: [
                                       Icon(
-                                        isVerified
+                                        worker.isVerified
                                             ? Icons.verified
                                             : Icons.verified_outlined,
                                         color:
-                                            isVerified
+                                            worker.isVerified
                                                 ? Colors.green
                                                 : Colors.grey,
                                         size: 18,
                                       ),
                                       const SizedBox(width: 6),
                                       Text(
-                                        isVerified
+                                        worker.isVerified
                                             ? "Verified"
                                             : "Not Verified",
                                         style: TextStyle(
                                           color:
-                                              isVerified
+                                              worker.isVerified
                                                   ? Colors.green
                                                   : Colors.grey.shade600,
                                           fontWeight: FontWeight.w500,
@@ -208,8 +273,6 @@ class _WorkerListViewState extends State<WorkerListView> {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-
-                                  // Skills
                                   Wrap(
                                     spacing: 6,
                                     children:
@@ -233,10 +296,7 @@ class _WorkerListViewState extends State<WorkerListView> {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 12),
-
-                        // Buttons Row: Call and Select side by side
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -262,7 +322,12 @@ class _WorkerListViewState extends State<WorkerListView> {
                                 ),
                               ),
                               onPressed: () {
-                                // TODO: Assign this worker to the job using widget.jobId
+                                showAssignWorkerDialog(
+                                  context: context,
+                                  workerName: worker.name ?? "Worker",
+                                  jobId: widget.jobId,
+                                  workerId: worker.id.toString(),
+                                );
                               },
                               child: const Text("Select"),
                             ),

@@ -65,4 +65,34 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       throw Exception("An unexpected error occurred while posting job: $e");
     }
   }
+
+  @override
+  Future<void> assignWorkerToJob(
+    String? token,
+    String jobId,
+    String workerId,
+  ) async {
+    try {
+      final response = await _apiService.dio.post(
+        "${ApiEndpoints.assignWorkerToJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        data: {"jobId": jobId, "workerId": workerId},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Worker assigned successfully
+        return Future.value();
+      } else {
+        // Handle unexpected status codes
+        throw Exception(
+          "Failed to assign worker to job: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to assign worker to job: ${e.message}");
+    } catch (e) {
+      throw Exception(
+        "An unexpected error occurred while assigning worker: $e",
+      );
+    }
+  }
 }

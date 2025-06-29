@@ -31,3 +31,16 @@ class CustomerWorkerListError extends CustomerWorkerListState {
   @override
   List<Object?> get props => [message];
 }
+
+class AssigningWorker extends CustomerWorkerListState {}
+
+class AssignWorkerSuccess extends CustomerWorkerListState {}
+
+class AssignWorkerFailure extends CustomerWorkerListState {
+  final String message;
+
+  const AssignWorkerFailure(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

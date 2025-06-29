@@ -36,4 +36,20 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       return Left(ApiFailure(message: "Failed to post job: ${e.toString()}"));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> assignWorkerToJob(
+    String? token,
+    String jobId,
+    String workerId,
+  ) async {
+    try {
+      await _remoteDatasource.assignWorkerToJob(token, jobId, workerId);
+      return const Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to assign worker to job: ${e.toString()}"),
+      );
+    }
+  }
 }

@@ -22,6 +22,7 @@ class ApiEndpoints {
   // Customer Jobs
   static const String customerPublicJobs = "customer/jobs/open";
   static const String postCustomerJob = "customer/jobs";
+  static const String assignWorkerToJob = "customer/jobs/assign";
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";

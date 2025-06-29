@@ -18,6 +18,7 @@ class PostJobRequested extends CustomerPostJobsEvent {
   final String date;
   final String time;
   final BuildContext context;
+  final VoidCallback? onSuccess;
 
   const PostJobRequested({
     required this.description,
@@ -26,6 +27,7 @@ class PostJobRequested extends CustomerPostJobsEvent {
     required this.date,
     required this.time,
     required this.context,
+    this.onSuccess,
   });
 
   @override
