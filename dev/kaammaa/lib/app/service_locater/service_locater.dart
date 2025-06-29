@@ -21,6 +21,10 @@ import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_all_
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/post_public_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_workers/data/data_source/remote_datasource/customer_worker_remote_datasource.dart';
+import 'package:kaammaa/features/customer/customer_workers/data/repository/remote_repository/customer_worker_remote_repository.dart';
+import 'package:kaammaa/features/customer/customer_workers/domain/use_case/get_matching_worker_usecase.dart';
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
 import 'package:kaammaa/features/splash/presentation/view_model/splash_view_model.dart';
@@ -154,8 +158,19 @@ Future<void> _initCustomerJobsModule() async {
   );
 
   serviceLocater.registerFactory(
+    () => CustomerWorkerRemoteDatasource(
+      apiService: serviceLocater<ApiService>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
     () => CustomerJobsRemoteRepository(
       remoteDatasource: serviceLocater<CustomerJobsRemoteDatasource>(),
+    ),
+  );
+  serviceLocater.registerFactory(
+    () => CustomerWorkerRemoteRepository(
+      remoteDatasource: serviceLocater<CustomerWorkerRemoteDatasource>(),
     ),
   );
 
@@ -165,10 +180,22 @@ Future<void> _initCustomerJobsModule() async {
       tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
     ),
   );
+  serviceLocater.registerFactory(
+    () => GetMatchingWorkerUsecase(
+      customerWorkerRepository:
+          serviceLocater<CustomerWorkerRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
 
   serviceLocater.registerLazySingleton(
     () =>
         CustomerPostedJobsViewModel(serviceLocater<GetAllPublicJobsUsecase>()),
+  );
+  serviceLocater.registerLazySingleton(
+    () => CustomerWorkerListViewModel(
+      getMatchingWorkerUsecase: serviceLocater<GetMatchingWorkerUsecase>(),
+    ),
   );
 
   serviceLocater.registerFactory(

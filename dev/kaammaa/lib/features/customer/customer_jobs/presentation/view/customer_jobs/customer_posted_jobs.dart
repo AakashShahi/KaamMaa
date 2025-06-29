@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/app/service_locater/service_locater.dart';
 import 'package:kaammaa/core/utils/backend_image_url.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view/worker_list_view.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_state.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
 
 class CustomerPostedJobs extends StatelessWidget {
   const CustomerPostedJobs({super.key});
@@ -88,7 +91,7 @@ class CustomerPostedJobs extends StatelessWidget {
                                 _infoRow(Icons.location_on, job.location),
                                 _infoRow(
                                   Icons.category,
-                                  job.category.categoryName.toString(),
+                                  job.category.category.toString(),
                                 ),
                               ],
                             ),
@@ -111,7 +114,24 @@ class CustomerPostedJobs extends StatelessWidget {
                                 children: [
                                   TextButton.icon(
                                     onPressed: () {
-                                      // TODO: Assign job logic
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (_) => BlocProvider.value(
+                                                value:
+                                                    serviceLocater<
+                                                      CustomerWorkerListViewModel
+                                                    >(),
+                                                child: WorkerListView(
+                                                  category:
+                                                      job.category.categoryName
+                                                          .toString(),
+                                                  jobId: job.jobId.toString(),
+                                                ),
+                                              ),
+                                        ),
+                                      );
                                     },
                                     icon: const Icon(
                                       Icons.assignment_turned_in,
