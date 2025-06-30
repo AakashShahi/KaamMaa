@@ -52,4 +52,19 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deletePostedJob(
+    String? token,
+    String? jobId,
+  ) async {
+    try {
+      await _remoteDatasource.deletePostedJob(token, jobId);
+      return const Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to delete a job: ${e.toString()}"),
+      );
+    }
+  }
 }

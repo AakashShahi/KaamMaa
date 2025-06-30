@@ -6,4 +6,6 @@ abstract interface class ICustomerJobsDatasource {
   Future<void> postJob(String? token, CustomerJobsEntity customerJobsEntity);
 
   Future<void> assignWorkerToJob(String? token, String jobId, String workerId);
+
+  Future<void> deletePostedJob(String? token, String? jobId);
 }

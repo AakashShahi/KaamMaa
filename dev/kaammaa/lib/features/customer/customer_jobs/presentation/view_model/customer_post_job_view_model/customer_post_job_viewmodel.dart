@@ -42,6 +42,10 @@ class CustomerPostJobsViewModel
         ),
       );
 
+      serviceLocater<CustomerPostedJobsViewModel>().add(
+        LoadCustomerPostedJobs(),
+      );
+
       result.fold(
         (failure) {
           emit(CustomerPostJobsFailure(failure.message));
@@ -59,9 +63,6 @@ class CustomerPostJobsViewModel
             message: "Job posted successfully!",
             backgroundColor: AppColors.success,
             icon: const Icon(Icons.check_circle, color: Colors.white),
-          );
-          serviceLocater<CustomerPostedJobsViewModel>().add(
-            LoadCustomerPostedJobs(),
           );
           event.onSuccess?.call();
         },

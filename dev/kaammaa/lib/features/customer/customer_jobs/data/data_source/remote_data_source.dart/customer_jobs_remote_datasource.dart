@@ -95,4 +95,26 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       );
     }
   }
+
+  @override
+  Future<void> deletePostedJob(String? token, String? jobId) async {
+    try {
+      final response = await _apiService.dio.delete(
+        "${ApiEndpoints.deletePostedJob}/$jobId/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Future.value();
+      } else {
+        // Handle unexpected status codes
+        throw Exception(
+          "Failed to delete posted job: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to delete a job: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred while deleting job: $e");
+    }
+  }
 }

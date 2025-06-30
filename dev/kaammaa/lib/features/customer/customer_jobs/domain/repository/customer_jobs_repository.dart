@@ -17,4 +17,6 @@ abstract interface class ICustomerJobsRepository {
     String jobId,
     String workerId,
   );
+
+  Future<Either<Failure, void>> deletePostedJob(String? token, String? jobId);
 }

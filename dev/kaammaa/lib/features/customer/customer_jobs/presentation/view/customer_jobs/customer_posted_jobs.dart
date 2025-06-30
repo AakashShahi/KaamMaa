@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/app/service_locater/service_locater.dart';
+import 'package:kaammaa/core/common/app_alertdialog.dart';
 import 'package:kaammaa/core/utils/backend_image_url.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view/worker_list_view.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_event.dart';
@@ -197,7 +198,28 @@ class CustomerPostedJobs extends StatelessWidget {
                         ),
                         TextButton.icon(
                           onPressed: () {
-                            // TODO: Add delete job logic
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (_) => AppAlertDialog(
+                                    title: "Delete Job",
+                                    message:
+                                        "Are you sure you want to delete this job?",
+                                    confirmText: "Delete",
+                                    cancelText: "Cancel",
+                                    onConfirmed: () {
+                                      Navigator.pop(context);
+                                      context
+                                          .read<CustomerPostedJobsViewModel>()
+                                          .add(
+                                            DeleteCustomerPostedJob(
+                                              jobId: job.jobId.toString(),
+                                              context: context,
+                                            ),
+                                          );
+                                    },
+                                  ),
+                            );
                           },
                           icon: const Icon(
                             Icons.delete,

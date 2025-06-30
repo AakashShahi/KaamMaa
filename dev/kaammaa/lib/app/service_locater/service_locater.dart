@@ -18,6 +18,7 @@ import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_m
 import 'package:kaammaa/features/customer/customer_jobs/data/data_source/remote_data_source.dart/customer_jobs_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/repository/remote_respository/customer_jobs_remote_repository.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/assign_worker_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/delete_posted_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_all_public_jobs_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/post_public_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
@@ -197,8 +198,17 @@ Future<void> _initCustomerJobsModule() async {
   );
 
   serviceLocater.registerFactory(
-    () =>
-        CustomerPostedJobsViewModel(serviceLocater<GetAllPublicJobsUsecase>()),
+    () => DeletePostedJobUsecase(
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => CustomerPostedJobsViewModel(
+      serviceLocater<GetAllPublicJobsUsecase>(),
+      serviceLocater<DeletePostedJobUsecase>(),
+    ),
   );
 
   serviceLocater.registerFactory(
