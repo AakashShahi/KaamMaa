@@ -15,6 +15,13 @@ class CustomerCategoryEntity extends Equatable {
     this.categoryDescription,
   });
 
+  const CustomerCategoryEntity.empty()
+    : categoryId = null,
+      category = null,
+      categoryName = null,
+      categoryImage = null,
+      categoryDescription = null;
+
   @override
   List<Object?> get props => [
     categoryId,

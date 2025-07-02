@@ -11,16 +11,20 @@ CustomerJobsApiModel _$CustomerJobsApiModelFromJson(
     CustomerJobsApiModel(
       jobId: json['_id'] as String?,
       postedBy: json['postedBy'] as String?,
-      assignedTo: json['assignedTo'] as String?,
-      category: CustomerCategoryApiModel.fromJson(
-          json['category'] as Map<String, dynamic>),
+      assignedTo: json['assignedTo'] == null
+          ? null
+          : CustomerWorkerApiModel.fromJson(
+              json['assignedTo'] as Map<String, dynamic>),
+      category: json['category'] == null
+          ? null
+          : CustomerCategoryApiModel.fromJson(
+              json['category'] as Map<String, dynamic>),
       icon: json['icon'] as String?,
       description: json['description'] as String,
       location: json['location'] as String,
       date: json['date'] as String,
       time: json['time'] as String,
       status: json['status'] as String?,
-      review: json['review'] as String?,
       deletedByCustomer: json['deletedByCustomer'] as bool?,
       deletedByWorker: json['deletedByWorker'] as bool?,
     );
@@ -38,7 +42,6 @@ Map<String, dynamic> _$CustomerJobsApiModelToJson(
       'date': instance.date,
       'time': instance.time,
       'status': instance.status,
-      'review': instance.review,
       'deletedByCustomer': instance.deletedByCustomer,
       'deletedByWorker': instance.deletedByWorker,
     };

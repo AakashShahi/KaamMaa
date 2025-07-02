@@ -11,6 +11,8 @@ import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_register_usecase.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_assigned_job_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_view_model.dart';
 import 'package:kaammaa/features/customer/customer_category/data/data_source/remote_data_source/customer_category_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_category/data/repository/remote_repository/customer_category_remote_repository.dart';
 import 'package:kaammaa/features/customer/customer_category/domain/use_case/get_all_customer_category_usecase.dart';
@@ -51,6 +53,7 @@ Future initDependencies() async {
   await _initCustomerDashboardModule();
   await _initCustomerJobsModule();
   await _initCustomerCategoryModule();
+  // await _initCustomerAssignedJobModule();
 }
 
 // ________________________________________________________________
@@ -231,6 +234,18 @@ Future<void> _initCustomerJobsModule() async {
       getCategoriesUsecase: serviceLocater<GetAllCustomerCategoryUsecase>(),
     ),
   );
+
+  serviceLocater.registerFactory(
+    () => GetAssignedJobUsecase(
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () =>
+        CustomerAssignedJobsViewModel(serviceLocater<GetAssignedJobUsecase>()),
+  );
 }
 
 // ________________________________________________________________
@@ -256,3 +271,31 @@ Future<void> _initCustomerCategoryModule() async {
     ),
   );
 }
+
+// Future<void> _initCustomerAssignedJobModule() async {
+//   serviceLocater.registerFactory(
+//     () => CustomerAssignedJobRemoteDatasource(
+//       apiService: serviceLocater<ApiService>(),
+//     ),
+//   );
+
+//   serviceLocater.registerFactory(
+//     () => CustomerAssignedJobRemoteRepository(
+//       assignedJobRemoteDatasource:
+//           serviceLocater<CustomerAssignedJobRemoteDatasource>(),
+//     ),
+//   );
+
+//   serviceLocater.registerFactory(
+//     () => GetAssignedJobUsecase(
+//       assignedJobRepository:
+//           serviceLocater<CustomerAssignedJobRemoteRepository>(),
+//       tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+//     ),
+//   );
+
+//   serviceLocater.registerFactory(
+//     () =>
+//         CustomerAssignedJobsViewModel(serviceLocater<GetAssignedJobUsecase>()),
+//   );
+// }

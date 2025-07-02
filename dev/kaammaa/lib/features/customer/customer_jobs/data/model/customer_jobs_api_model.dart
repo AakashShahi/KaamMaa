@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaammaa/features/customer/customer_category/data/model/customer_category_api_model.dart';
+import 'package:kaammaa/features/customer/customer_category/domain/entity/customer_category_entity.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/entity/customer_jobs_entity.dart';
+import 'package:kaammaa/features/customer/customer_workers/data/model/customer_worker_api_model.dart';
+import 'package:kaammaa/features/customer/customer_workers/domain/entity/customer_worker_entity.dart';
 
 part 'customer_jobs_api_model.g.dart';
 
@@ -10,15 +13,14 @@ class CustomerJobsApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? jobId;
   final String? postedBy;
-  final String? assignedTo;
-  final CustomerCategoryApiModel category;
+  final CustomerWorkerApiModel? assignedTo;
+  final CustomerCategoryApiModel? category;
   final String? icon;
   final String description;
   final String location;
   final String date;
   final String time;
   final String? status;
-  final String? review;
   final bool? deletedByCustomer;
   final bool? deletedByWorker;
 
@@ -33,7 +35,6 @@ class CustomerJobsApiModel extends Equatable {
     required this.date,
     required this.time,
     this.status,
-    this.review,
     this.deletedByCustomer,
     this.deletedByWorker,
   });
@@ -47,15 +48,14 @@ class CustomerJobsApiModel extends Equatable {
     return CustomerJobsEntity(
       jobId: jobId,
       postedBy: postedBy,
-      assignedTo: assignedTo,
-      category: category.toEntity(),
+      assignedTo: assignedTo?.toEntity() ?? const CustomerWorkerEntity.empty(),
+      category: category?.toEntity() ?? const CustomerCategoryEntity.empty(),
       icon: icon,
       description: description,
       location: location,
       date: date,
       time: time,
       status: status,
-      review: review,
       deletedByCustomer: deletedByCustomer ?? false,
       deletedByWorker: deletedByWorker ?? false,
     );
@@ -65,7 +65,6 @@ class CustomerJobsApiModel extends Equatable {
     final customerJob = CustomerJobsApiModel(
       jobId: entity.jobId,
       postedBy: entity.postedBy,
-      assignedTo: entity.assignedTo,
       category: CustomerCategoryApiModel.fromEntity(entity.category),
       icon: entity.icon,
       description: entity.description,
@@ -73,7 +72,6 @@ class CustomerJobsApiModel extends Equatable {
       date: entity.date,
       time: entity.time,
       status: entity.status,
-      review: entity.review,
       deletedByCustomer: entity.deletedByCustomer,
       deletedByWorker: entity.deletedByWorker,
     );
@@ -98,7 +96,6 @@ class CustomerJobsApiModel extends Equatable {
     date,
     time,
     status,
-    review,
     deletedByCustomer,
     deletedByWorker,
   ];

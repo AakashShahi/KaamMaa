@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaammaa/features/customer/customer_category/data/model/customer_category_api_model.dart';
+import 'package:kaammaa/features/customer/customer_category/domain/entity/customer_category_entity.dart';
 import 'package:kaammaa/features/customer/customer_workers/domain/entity/customer_worker_entity.dart';
 
 part 'customer_worker_api_model.g.dart';
@@ -14,23 +15,23 @@ class CustomerWorkerApiModel extends Equatable {
   final String? phone;
   final String? profilePic;
   final String? location;
-  final List<String> skills;
-  @JsonKey(name: 'profession') // THIS FIX
-  final CustomerCategoryApiModel category;
+  final List<String>? skills;
+  @JsonKey(name: 'profession')
+  final CustomerCategoryApiModel? category;
   final String? name;
-  final bool isVerified;
+  final bool? isVerified;
 
   const CustomerWorkerApiModel({
     this.workerId,
-    required this.username,
-    required this.email,
-    required this.phone,
+    this.username,
+    this.email,
+    this.phone,
     this.profilePic,
     this.location,
-    required this.skills,
-    required this.category,
-    required this.name,
-    required this.isVerified,
+    this.skills,
+    this.category,
+    this.name,
+    this.isVerified,
   });
 
   factory CustomerWorkerApiModel.fromJson(Map<String, dynamic> json) =>
@@ -43,13 +44,13 @@ class CustomerWorkerApiModel extends Equatable {
       id: workerId,
       username: username ?? '',
       email: email ?? '',
-      skills: skills,
-      isVerified: isVerified,
       phone: phone ?? '',
       profilePic: profilePic,
       location: location,
       name: name,
-      profession: category.toEntity(),
+      isVerified: isVerified ?? false,
+      skills: skills ?? [],
+      profession: category?.toEntity() ?? const CustomerCategoryEntity.empty(),
     );
   }
 
@@ -61,10 +62,10 @@ class CustomerWorkerApiModel extends Equatable {
       phone: entity.phone,
       profilePic: entity.profilePic,
       location: entity.location,
-      skills: entity.skills,
-      category: CustomerCategoryApiModel.fromEntity(entity.profession),
       name: entity.name,
       isVerified: entity.isVerified,
+      skills: entity.skills,
+      category: CustomerCategoryApiModel.fromEntity(entity.profession),
     );
   }
 
@@ -75,5 +76,16 @@ class CustomerWorkerApiModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [
+    workerId,
+    username,
+    email,
+    phone,
+    profilePic,
+    location,
+    skills,
+    category,
+    name,
+    isVerified,
+  ];
 }

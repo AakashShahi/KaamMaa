@@ -19,4 +19,8 @@ abstract interface class ICustomerJobsRepository {
   );
 
   Future<Either<Failure, void>> deletePostedJob(String? token, String? jobId);
+
+  Future<Either<Failure, List<CustomerJobsEntity>>> getAssignedJob(
+    String? token,
+  );
 }

@@ -3,6 +3,7 @@ import 'package:kaammaa/app/constant/api/api_endpoints.dart';
 import 'package:kaammaa/core/network/api_service.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/data_source/customer_jobs_datasource.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/dto/get_all_customer_jobs_dto.dart';
+import 'package:kaammaa/features/customer/customer_jobs/data/dto/get_assigned_job_dto.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/model/customer_jobs_api_model.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/entity/customer_jobs_entity.dart';
 
@@ -115,6 +116,33 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       throw Exception("Failed to delete a job: ${e.message}");
     } catch (e) {
       throw Exception("An unexpected error occurred while deleting job: $e");
+    }
+  }
+
+  @override
+  Future<List<CustomerJobsEntity>> getAssignedJob(String? token) async {
+    try {
+      final response = await _apiService.dio.get(
+        "${ApiEndpoints.getAssignedJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200) {
+        print("FULL API RESPONSE: ${response.data}");
+        GetAssignedJobDto getAssignedJobDto = GetAssignedJobDto.fromJson(
+          response.data,
+        );
+        print("Get Assigned Job ${getAssignedJobDto.data}");
+        return CustomerJobsApiModel.toEntityList(getAssignedJobDto.data ?? []);
+      } else {
+        // Handle unexpected status codes
+        throw Exception(
+          "Failed to fetch assigned jobs : ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to fetch assigned jobs: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
     }
   }
 }

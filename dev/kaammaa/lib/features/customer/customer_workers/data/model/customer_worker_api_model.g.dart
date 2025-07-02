@@ -16,11 +16,13 @@ CustomerWorkerApiModel _$CustomerWorkerApiModelFromJson(
       profilePic: json['profilePic'] as String?,
       location: json['location'] as String?,
       skills:
-          (json['skills'] as List<dynamic>).map((e) => e as String).toList(),
-      category: CustomerCategoryApiModel.fromJson(
-          json['profession'] as Map<String, dynamic>),
+          (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      category: json['profession'] == null
+          ? null
+          : CustomerCategoryApiModel.fromJson(
+              json['profession'] as Map<String, dynamic>),
       name: json['name'] as String?,
-      isVerified: json['isVerified'] as bool,
+      isVerified: json['isVerified'] as bool?,
     );
 
 Map<String, dynamic> _$CustomerWorkerApiModelToJson(

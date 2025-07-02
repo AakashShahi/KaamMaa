@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/app/service_locater/service_locater.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_event.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_view_model.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_event.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_state.dart';
 import 'package:kaammaa/features/customer/customer_home/presentation/view/customer_home_view.dart';
@@ -25,6 +27,11 @@ class CustomerDashboardViewModel
                   value:
                       serviceLocater<CustomerPostedJobsViewModel>()
                         ..add(LoadCustomerPostedJobs()),
+                ),
+                BlocProvider.value(
+                  value:
+                      serviceLocater<CustomerAssignedJobsViewModel>()
+                        ..add(LoadCustomerAssignedJobs()),
                 ),
               ],
               child: const CustomerJobsView(),

@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:kaammaa/features/customer/customer_category/domain/entity/customer_category_entity.dart';
+import 'package:kaammaa/features/customer/customer_workers/domain/entity/customer_worker_entity.dart';
 
 class CustomerJobsEntity extends Equatable {
   final String? jobId;
   final String? postedBy;
-  final String? assignedTo;
+  final CustomerWorkerEntity? assignedTo;
   final CustomerCategoryEntity category;
   final String? icon;
   final String description;
@@ -12,7 +13,6 @@ class CustomerJobsEntity extends Equatable {
   final String date;
   final String time;
   final String? status;
-  final String? review;
   final bool? deletedByCustomer;
   final bool? deletedByWorker;
 
@@ -27,7 +27,6 @@ class CustomerJobsEntity extends Equatable {
     required this.date,
     required this.time,
     this.status,
-    this.review,
     this.deletedByCustomer,
     this.deletedByWorker,
   });
@@ -44,7 +43,6 @@ class CustomerJobsEntity extends Equatable {
     date,
     time,
     status,
-    review,
     deletedByCustomer,
     deletedByWorker,
   ];

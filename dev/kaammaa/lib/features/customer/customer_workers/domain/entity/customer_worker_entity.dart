@@ -26,6 +26,18 @@ class CustomerWorkerEntity extends Equatable {
     required this.phone,
   });
 
+  const CustomerWorkerEntity.empty()
+    : id = '',
+      username = '',
+      name = '',
+      email = '',
+      profession = const CustomerCategoryEntity(),
+      skills = const [],
+      location = '',
+      isVerified = false,
+      profilePic = '',
+      phone = '';
+
   @override
   List<Object?> get props => [
     id,
