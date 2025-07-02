@@ -22,6 +22,9 @@ class WorkerListView extends StatefulWidget {
 }
 
 class _WorkerListViewState extends State<WorkerListView> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchLocation = "";
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,17 @@ class _WorkerListViewState extends State<WorkerListView> {
         LoadWorkersByCategory(widget.category),
       );
     });
+    _searchController.addListener(() {
+      setState(() {
+        _searchLocation = _searchController.text.trim().toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _launchDialer(String phoneNumber) async {
@@ -122,226 +136,280 @@ class _WorkerListViewState extends State<WorkerListView> {
           } else if (state is CustomerWorkerListError) {
             return Center(child: Text(state.message));
           } else if (state is CustomerWorkerListLoaded) {
-            final workers = state.workers;
+            final allWorkers = state.workers;
 
-            if (workers.isEmpty) {
-              return const Center(child: Text("No workers found"));
+            // Filter workers locally by location search
+            final filteredWorkers =
+                _searchLocation.isEmpty
+                    ? allWorkers
+                    : allWorkers.where((worker) {
+                      final location = (worker.location ?? "").toLowerCase();
+                      return location.contains(_searchLocation);
+                    }).toList();
+
+            if (filteredWorkers.isEmpty) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: _buildSearchField(),
+                  ),
+                  const Expanded(
+                    child: Center(
+                      child: Text("No workers found for this location."),
+                    ),
+                  ),
+                ],
+              );
             }
 
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: workers.length,
-              itemBuilder: (context, index) {
-                final worker = workers[index];
-                final imageUrl =
-                    worker.profilePic != null
-                        ? getBackendImageUrl(worker.profilePic!)
-                        : null;
-
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 4,
-                  child: Padding(
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: _buildSearchField(),
+                ),
+                Expanded(
+                  child: ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: SizedBox(
-                                height: 56,
-                                width: 56,
-                                child:
-                                    imageUrl != null
-                                        ? Image.network(
-                                          imageUrl,
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (
-                                            context,
-                                            error,
-                                            stackTrace,
-                                          ) {
-                                            return Container(
-                                              color: Colors.grey.shade300,
-                                              child: const Icon(
-                                                Icons.person,
-                                                color: Colors.white,
-                                              ),
-                                            );
-                                          },
-                                        )
-                                        : Container(
-                                          color: Colors.grey.shade300,
-                                          child: const Icon(
-                                            Icons.person,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
+                    itemCount: filteredWorkers.length,
+                    itemBuilder: (context, index) {
+                      final worker = filteredWorkers[index];
+                      final imageUrl =
+                          worker.profilePic != null
+                              ? getBackendImageUrl(worker.profilePic!)
+                              : null;
+
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            children: [
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.person, size: 18),
-                                      const SizedBox(width: 6),
-                                      Flexible(
-                                        child: Text(
-                                          worker.name ?? "No Name",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.location_on, size: 18),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        worker.location ?? "No Location",
-                                        style: TextStyle(
-                                          color: Colors.grey.shade700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.work, size: 18),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        worker.profession.categoryName ??
-                                            "No Profession",
-                                        style: TextStyle(
-                                          color: Colors.grey.shade700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.phone, size: 18),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        worker.phone,
-                                        style: TextStyle(
-                                          color: Colors.grey.shade700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        worker.isVerified
-                                            ? Icons.verified
-                                            : Icons.verified_outlined,
-                                        color:
-                                            worker.isVerified
-                                                ? Colors.green
-                                                : Colors.grey,
-                                        size: 18,
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        worker.isVerified
-                                            ? "Verified"
-                                            : "Not Verified",
-                                        style: TextStyle(
-                                          color:
-                                              worker.isVerified
-                                                  ? Colors.green
-                                                  : Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Wrap(
-                                    spacing: 6,
-                                    children:
-                                        worker.skills
-                                            .map(
-                                              (skill) => Chip(
-                                                label: Text(
-                                                  skill,
-                                                  style: const TextStyle(
-                                                    fontSize: 12,
-                                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: SizedBox(
+                                      height: 56,
+                                      width: 56,
+                                      child:
+                                          imageUrl != null
+                                              ? Image.network(
+                                                imageUrl,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (
+                                                  context,
+                                                  error,
+                                                  stackTrace,
+                                                ) {
+                                                  return Container(
+                                                    color: Colors.grey.shade300,
+                                                    child: const Icon(
+                                                      Icons.person,
+                                                      color: Colors.white,
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                              : Container(
+                                                color: Colors.grey.shade300,
+                                                child: const Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
                                                 ),
-                                                backgroundColor:
-                                                    Colors.grey.shade200,
                                               ),
-                                            )
-                                            .toList(),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.person, size: 18),
+                                            const SizedBox(width: 6),
+                                            Flexible(
+                                              child: Text(
+                                                worker.name ?? "No Name",
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on,
+                                              size: 18,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              worker.location ?? "No Location",
+                                              style: TextStyle(
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.work, size: 18),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              worker.profession.categoryName ??
+                                                  "No Profession",
+                                              style: TextStyle(
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.phone, size: 18),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              worker.phone,
+                                              style: TextStyle(
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              worker.isVerified
+                                                  ? Icons.verified
+                                                  : Icons.verified_outlined,
+                                              color:
+                                                  worker.isVerified
+                                                      ? Colors.green
+                                                      : Colors.grey,
+                                              size: 18,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              worker.isVerified
+                                                  ? "Verified"
+                                                  : "Not Verified",
+                                              style: TextStyle(
+                                                color:
+                                                    worker.isVerified
+                                                        ? Colors.green
+                                                        : Colors.grey.shade600,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Wrap(
+                                          spacing: 6,
+                                          children:
+                                              worker.skills
+                                                  .map(
+                                                    (skill) => Chip(
+                                                      label: Text(
+                                                        skill,
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.grey.shade200,
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.call, size: 18),
-                              label: Text('Call ${worker.name ?? "Worker"}'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.call, size: 18),
+                                    label: Text(
+                                      'Call ${worker.name ?? "Worker"}',
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed:
+                                        () => _launchDialer(worker.phone),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      showAssignWorkerDialog(
+                                        context: context,
+                                        workerName: worker.name ?? "Worker",
+                                        jobId: widget.jobId,
+                                        workerId: worker.id.toString(),
+                                      );
+                                    },
+                                    child: const Text("Select"),
+                                  ),
+                                ],
                               ),
-                              onPressed: () => _launchDialer(worker.phone),
-                            ),
-                            const SizedBox(width: 12),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              onPressed: () {
-                                showAssignWorkerDialog(
-                                  context: context,
-                                  workerName: worker.name ?? "Worker",
-                                  jobId: widget.jobId,
-                                  workerId: worker.id.toString(),
-                                );
-                              },
-                              child: const Text("Select"),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             );
           }
           return const SizedBox.shrink();
         },
+      ),
+    );
+  }
+
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _searchController,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.search),
+        hintText: 'Search location...',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 16,
+        ),
       ),
     );
   }
