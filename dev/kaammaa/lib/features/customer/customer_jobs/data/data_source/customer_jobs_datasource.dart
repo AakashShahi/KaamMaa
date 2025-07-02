@@ -12,4 +12,6 @@ abstract interface class ICustomerJobsDatasource {
   Future<List<CustomerJobsEntity>> getAssignedJob(String? token);
 
   Future<void> cancelJobAssignment(String? token, String? jobId);
+
+  Future<List<CustomerJobsEntity>> getRequestedJobs(String? token);
 }

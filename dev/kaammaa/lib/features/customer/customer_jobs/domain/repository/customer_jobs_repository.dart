@@ -28,4 +28,8 @@ abstract interface class ICustomerJobsRepository {
     String? token,
     String? jobId,
   );
+
+  Future<Either<Failure, List<CustomerJobsEntity>>> getRequestedJobs(
+    String? token,
+  );
 }

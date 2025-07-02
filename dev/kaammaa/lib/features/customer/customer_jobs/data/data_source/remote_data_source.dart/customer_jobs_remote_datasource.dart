@@ -166,4 +166,27 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       throw Exception("An unexpected error occurred: $e");
     }
   }
+
+  @override
+  Future<List<CustomerJobsEntity>> getRequestedJobs(String? token) async {
+    try {
+      final response = await _apiService.dio.get(
+        "${ApiEndpoints.getRequestedJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200) {
+        GetAllCustomerJobsDto getAllCustomerJobsDto =
+            GetAllCustomerJobsDto.fromJson(response.data);
+        return CustomerJobsApiModel.toEntityList(getAllCustomerJobsDto.data);
+      } else {
+        throw Exception(
+          "Failed to fetch requested jobs: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to fecth jobs: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
 }

@@ -13,6 +13,7 @@ import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/l
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/cancel_assigned_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_assigned_job_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_requested_jobs_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_view_model.dart';
 import 'package:kaammaa/features/customer/customer_category/data/data_source/remote_data_source/customer_category_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_category/data/repository/remote_repository/customer_category_remote_repository.dart';
@@ -26,6 +27,7 @@ import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_all_
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/post_public_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_workers/data/data_source/remote_datasource/customer_worker_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_workers/data/repository/remote_repository/customer_worker_remote_repository.dart';
@@ -254,6 +256,19 @@ Future<void> _initCustomerJobsModule() async {
     () => CustomerAssignedJobsViewModel(
       getAssignedJobUsecase: serviceLocater<GetAssignedJobUsecase>(),
       cancelAssignedJobUsecase: serviceLocater<CancelAssignedJobUsecase>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => GetRequestedJobsUsecase(
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => CustomerRequestedJobsViewModel(
+      getRequestedJobsUsecase: serviceLocater<GetRequestedJobsUsecase>(),
     ),
   );
 }

@@ -10,6 +10,8 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view/custom
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_event.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view/customer_profile_view.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view/customer_reviews_view.dart';
 
@@ -32,6 +34,11 @@ class CustomerDashboardViewModel
                   value:
                       serviceLocater<CustomerAssignedJobsViewModel>()
                         ..add(LoadCustomerAssignedJobs()),
+                ),
+                BlocProvider.value(
+                  value:
+                      serviceLocater<CustomerRequestedJobsViewModel>()
+                        ..add(LoadCustomerRequestedJobs()),
                 ),
               ],
               child: const CustomerJobsView(),
