@@ -232,7 +232,7 @@ class _CustomerPostJobsViewState extends State<CustomerPostJobsView> {
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.shade300),
+        // <-- Removed border here to fix double border issue
       ),
       child: child,
     );
@@ -243,7 +243,6 @@ class _CustomerPostJobsViewState extends State<CustomerPostJobsView> {
       hintText: hint,
       border: InputBorder.none,
       isDense: true,
-      contentPadding: const EdgeInsets.symmetric(vertical: 12),
     );
   }
 }

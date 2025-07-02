@@ -11,6 +11,7 @@ import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_register_usecase.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/cancel_assigned_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_assigned_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_view_model.dart';
 import 'package:kaammaa/features/customer/customer_category/data/data_source/remote_data_source/customer_category_remote_datasource.dart';
@@ -243,8 +244,17 @@ Future<void> _initCustomerJobsModule() async {
   );
 
   serviceLocater.registerFactory(
-    () =>
-        CustomerAssignedJobsViewModel(serviceLocater<GetAssignedJobUsecase>()),
+    () => CancelAssignedJobUsecase(
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => CustomerAssignedJobsViewModel(
+      getAssignedJobUsecase: serviceLocater<GetAssignedJobUsecase>(),
+      cancelAssignedJobUsecase: serviceLocater<CancelAssignedJobUsecase>(),
+    ),
   );
 }
 

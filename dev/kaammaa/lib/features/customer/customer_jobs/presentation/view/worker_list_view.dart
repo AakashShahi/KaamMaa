@@ -21,18 +21,22 @@ class WorkerListView extends StatefulWidget {
   State<WorkerListView> createState() => _WorkerListViewState();
 }
 
-class _WorkerListViewState extends State<WorkerListView> {
+class _WorkerListViewState extends State<WorkerListView>
+    with WidgetsBindingObserver {
   final TextEditingController _searchController = TextEditingController();
   String _searchLocation = "";
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     Future.microtask(() {
       context.read<CustomerWorkerListViewModel>().add(
         LoadWorkersByCategory(widget.category),
       );
     });
+
     _searchController.addListener(() {
       setState(() {
         _searchLocation = _searchController.text.trim().toLowerCase();
@@ -42,8 +46,19 @@ class _WorkerListViewState extends State<WorkerListView> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _searchController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Reload workers when coming back from background (e.g. after call)
+      context.read<CustomerWorkerListViewModel>().add(
+        LoadWorkersByCategory(widget.category),
+      );
+    }
   }
 
   void _launchDialer(String phoneNumber) async {
@@ -103,8 +118,7 @@ class _WorkerListViewState extends State<WorkerListView> {
                 ),
                 child: const Text("Confirm"),
                 onPressed: () {
-                  Navigator.of(ctx).pop(); // Close the dialog
-
+                  Navigator.of(ctx).pop();
                   context.read<CustomerWorkerListViewModel>().add(
                     AssignWorkerToJob(
                       jobId: jobId,
@@ -138,7 +152,6 @@ class _WorkerListViewState extends State<WorkerListView> {
           } else if (state is CustomerWorkerListLoaded) {
             final allWorkers = state.workers;
 
-            // Filter workers locally by location search
             final filteredWorkers =
                 _searchLocation.isEmpty
                     ? allWorkers

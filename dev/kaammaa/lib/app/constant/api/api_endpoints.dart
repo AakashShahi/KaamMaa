@@ -25,7 +25,7 @@ class ApiEndpoints {
   static const String assignWorkerToJob = "customer/jobs/assign";
   static const String deletePostedJob = "customer/jobs/";
   static const String getAssignedJob = "customer/jobs/assigned";
-
+  static const String cancelAssignedJob = "customer/jobs/unassign";
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";
 }

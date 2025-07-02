@@ -29,3 +29,15 @@ class CustomerAssignedJobsError extends CustomerAssignedJobsState {
   @override
   List<Object?> get props => [message];
 }
+
+class CustomerAssignedJobsCancelling extends CustomerAssignedJobsState {}
+
+class CustomerAssignedJobsCancelSuccess extends CustomerAssignedJobsState {}
+
+class CustomerAssignedJobsCancelFailure extends CustomerAssignedJobsState {
+  final String message;
+  const CustomerAssignedJobsCancelFailure(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

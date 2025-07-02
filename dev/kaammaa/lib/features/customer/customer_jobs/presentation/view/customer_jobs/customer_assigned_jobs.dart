@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/core/common/app_alertdialog.dart';
 import 'package:kaammaa/core/utils/backend_image_url.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_state.dart';
@@ -67,7 +68,7 @@ class CustomerAssignedJobs extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       itemCount: jobs.length,
                       itemBuilder: (context, index) {
-                        return _buildAssignedJobCard(jobs[index]);
+                        return _buildAssignedJobCard(context, jobs[index]);
                       },
                     ),
           );
@@ -78,7 +79,7 @@ class CustomerAssignedJobs extends StatelessWidget {
     );
   }
 
-  Widget _buildAssignedJobCard(CustomerJobsEntity job) {
+  Widget _buildAssignedJobCard(BuildContext context, CustomerJobsEntity job) {
     final hasProfilePic =
         job.assignedTo?.profilePic != null &&
         job.assignedTo!.profilePic!.isNotEmpty;
@@ -135,8 +136,26 @@ class CustomerAssignedJobs extends StatelessWidget {
                 ),
                 TextButton.icon(
                   onPressed: () {
-                    // TODO: implement cancel logic
-                    print("Cancel ${job.jobId}");
+                    showDialog(
+                      context: context,
+                      builder:
+                          (_) => AppAlertDialog(
+                            title: "Cancel Job Assignment",
+                            message:
+                                "Are you sure you want to cancel the assigned worker for this job?",
+                            confirmText: "Yes, Cancel",
+                            cancelText: "No",
+                            onConfirmed: () {
+                              Navigator.of(context).pop(); // close dialog
+                              context.read<CustomerAssignedJobsViewModel>().add(
+                                CancelCustomerAssignedJob(
+                                  job.jobId.toString(),
+                                  context,
+                                ),
+                              );
+                            },
+                          ),
+                    );
                   },
                   icon: const Icon(Icons.cancel, color: Colors.red),
                   label: const Text(

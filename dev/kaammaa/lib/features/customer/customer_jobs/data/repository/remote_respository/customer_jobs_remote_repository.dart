@@ -81,4 +81,19 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> cancelJobAssignment(
+    String? token,
+    String? jobId,
+  ) async {
+    try {
+      await _remoteDatasource.cancelJobAssignment(token, jobId);
+      return const Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to cancel a job: ${e.toString()}"),
+      );
+    }
+  }
 }

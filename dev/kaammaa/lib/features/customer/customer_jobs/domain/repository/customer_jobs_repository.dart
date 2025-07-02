@@ -23,4 +23,9 @@ abstract interface class ICustomerJobsRepository {
   Future<Either<Failure, List<CustomerJobsEntity>>> getAssignedJob(
     String? token,
   );
+
+  Future<Either<Failure, void>> cancelJobAssignment(
+    String? token,
+    String? jobId,
+  );
 }

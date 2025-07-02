@@ -85,7 +85,12 @@ ThemeData getApplicationTheme() {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: Colors.grey.shade100,
-      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      contentPadding: const EdgeInsets.fromLTRB(
+        20,
+        18,
+        16,
+        18,
+      ), // updated left padding
       hintStyle: TextStyle(
         color: Colors.grey.shade600,
         fontFamily: 'Inter',

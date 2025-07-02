@@ -145,4 +145,25 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       throw Exception("An unexpected error occurred: $e");
     }
   }
+
+  @override
+  Future<void> cancelJobAssignment(String? token, String? jobId) async {
+    try {
+      final response = await _apiService.dio.put(
+        "${ApiEndpoints.cancelAssignedJob}/$jobId/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Future.value();
+      } else {
+        throw Exception(
+          "Failed to cancel job assignment: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to cancel job assign: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
 }
