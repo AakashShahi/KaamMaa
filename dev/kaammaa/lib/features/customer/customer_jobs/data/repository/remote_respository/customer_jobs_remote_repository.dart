@@ -122,7 +122,7 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       return Right(null);
     } catch (e) {
       return Left(
-        ApiFailure(message: "Failed to fetach requested job: ${e.toString()}"),
+        ApiFailure(message: "Failed to accept requested job: ${e.toString()}"),
       );
     }
   }
@@ -137,7 +137,23 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       return Right(null);
     } catch (e) {
       return Left(
-        ApiFailure(message: "Failed to fetach requested job: ${e.toString()}"),
+        ApiFailure(message: "Failed to reject requested job: ${e.toString()}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CustomerJobsEntity>>> getInProgressJobs(
+    String? token,
+  ) async {
+    try {
+      final inProgressJob = await _remoteDatasource.getInProgressJobs(token);
+      return Right(inProgressJob);
+    } catch (e) {
+      return Left(
+        ApiFailure(
+          message: "Failed to fetch in progress customer jobs: ${e.toString()}",
+        ),
       );
     }
   }

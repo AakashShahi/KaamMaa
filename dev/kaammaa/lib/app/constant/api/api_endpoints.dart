@@ -31,6 +31,7 @@ class ApiEndpoints {
   static const String getRequestedJob = "customer/jobs/requested";
   static const String acceptRequestedJob = "customer/jobs/accept-worker";
   static const String rejectRequestedJob = "customer/jobs/reject-worker";
+  static const String getInProgressJob = "customer/jobs/in-progress";
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";

@@ -239,4 +239,27 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       throw Exception("An unexpected error occurred: $e");
     }
   }
+
+  @override
+  Future<List<CustomerJobsEntity>> getInProgressJobs(String? token) async {
+    try {
+      final response = await _apiService.dio.get(
+        "${ApiEndpoints.getInProgressJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200) {
+        GetAllCustomerJobsDto getAllCustomerJobsDto =
+            GetAllCustomerJobsDto.fromJson(response.data);
+        return CustomerJobsApiModel.toEntityList(getAllCustomerJobsDto.data);
+      } else {
+        throw Exception(
+          "Failed to fetch In progress jobs: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to fetch in progress jobs: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
 }

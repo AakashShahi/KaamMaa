@@ -7,6 +7,8 @@ import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_m
 import 'package:kaammaa/features/customer/customer_home/presentation/view/customer_home_view.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view/customer_jobs_view.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view/customer_post_jobs_view.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_event.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
@@ -39,6 +41,11 @@ class CustomerDashboardViewModel
                   value:
                       serviceLocater<CustomerRequestedJobsViewModel>()
                         ..add(LoadCustomerRequestedJobs()),
+                ),
+                BlocProvider.value(
+                  value:
+                      serviceLocater<CustomerInProgressJobsViewModel>()
+                        ..add(LoadCustomerInProgressJobs()),
                 ),
               ],
               child: const CustomerJobsView(),

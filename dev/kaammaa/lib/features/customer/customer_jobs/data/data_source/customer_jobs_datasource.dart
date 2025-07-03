@@ -18,4 +18,6 @@ abstract interface class ICustomerJobsDatasource {
   Future<void> acceptRequestedJob(String? token, String workerId, String jobId);
 
   Future<void> rejectRequestedJob(String? token, String jobId);
+
+  Future<List<CustomerJobsEntity>> getInProgressJobs(String? token);
 }
