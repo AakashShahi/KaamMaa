@@ -5,8 +5,6 @@ ThemeData getApplicationTheme() {
   final base = ThemeData.light();
 
   return base.copyWith(
-    useMaterial3: false,
-
     scaffoldBackgroundColor: Colors.white,
 
     textTheme: base.textTheme.apply(fontFamily: 'Inter'),

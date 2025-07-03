@@ -25,7 +25,7 @@ class CustomerDashboardView extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(110),
+            preferredSize: const Size.fromHeight(120),
             child: Material(
               elevation: 8,
               shadowColor: Colors.black38,

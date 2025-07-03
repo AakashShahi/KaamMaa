@@ -35,7 +35,7 @@ class CustomerJobsView extends StatelessWidget {
               tabs: _tabs,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Expanded(
             child: TabBarView(
               children: [

@@ -12,6 +12,8 @@ class ApiEndpoints {
   static const String serverAddress = "http://192.168.1.70:5050/api/";
   static const String imageUrl = "http://192.168.1.70:5050/";
 
+  // static const String imageUrl = "http://10.0.2.2:5050/";
+
   //Auth
   static const String login = "auth/login";
   static const String register = "auth/register";
