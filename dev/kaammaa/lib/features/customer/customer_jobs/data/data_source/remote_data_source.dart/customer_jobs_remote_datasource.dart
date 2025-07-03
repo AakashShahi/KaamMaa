@@ -189,4 +189,54 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       throw Exception("An unexpected error occurred: $e");
     }
   }
+
+  @override
+  Future<void> acceptRequestedJob(
+    String? token,
+    String workerId,
+    String jobId,
+  ) async {
+    try {
+      final response = await _apiService.dio.post(
+        "${ApiEndpoints.acceptRequestedJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        data: {"jobId": jobId, "workerId": workerId},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Worker assigned successfully
+        return Future.value();
+      } else {
+        // Handle unexpected status codes
+        throw Exception(
+          "Failed to accept the worker for job: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to accept request: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
+
+  @override
+  Future<void> rejectRequestedJob(String? token, String jobId) async {
+    try {
+      final response = await _apiService.dio.post(
+        "${ApiEndpoints.rejectRequestedJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        data: {"jobId": jobId},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Future.value();
+      } else {
+        throw Exception(
+          "Failed to reject the worker for job: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to reject request: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
 }

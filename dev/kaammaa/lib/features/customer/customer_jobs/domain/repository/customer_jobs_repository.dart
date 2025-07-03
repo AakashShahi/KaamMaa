@@ -32,4 +32,12 @@ abstract interface class ICustomerJobsRepository {
   Future<Either<Failure, List<CustomerJobsEntity>>> getRequestedJobs(
     String? token,
   );
+
+  Future<Either<Failure, void>> acceptRequestedJob(
+    String? token,
+    String workerId,
+    String jobId,
+  );
+
+  Future<Either<Failure, void>> rejectRequestedJob(String? token, String jobId);
 }

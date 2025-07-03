@@ -110,4 +110,35 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> acceptRequestedJob(
+    String? token,
+    String workerId,
+    String jobId,
+  ) async {
+    try {
+      await _remoteDatasource.acceptRequestedJob(token, workerId, jobId);
+      return Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to fetach requested job: ${e.toString()}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> rejectRequestedJob(
+    String? token,
+    String jobId,
+  ) async {
+    try {
+      await _remoteDatasource.rejectRequestedJob(token, jobId);
+      return Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to fetach requested job: ${e.toString()}"),
+      );
+    }
+  }
 }

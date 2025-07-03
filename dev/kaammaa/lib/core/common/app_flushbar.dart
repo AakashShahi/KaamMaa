@@ -23,4 +23,6 @@ class AppFlushbar {
       icon: icon,
     ).show(context);
   }
+
+  static void success() {}
 }

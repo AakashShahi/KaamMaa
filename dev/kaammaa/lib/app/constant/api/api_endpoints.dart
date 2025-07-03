@@ -29,6 +29,8 @@ class ApiEndpoints {
   static const String getAssignedJob = "customer/jobs/assigned";
   static const String cancelAssignedJob = "customer/jobs/unassign";
   static const String getRequestedJob = "customer/jobs/requested";
+  static const String acceptRequestedJob = "customer/jobs/accept-worker";
+  static const String rejectRequestedJob = "customer/jobs/reject-worker";
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";

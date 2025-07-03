@@ -197,7 +197,7 @@ class CustomerRequestedJobs extends StatelessWidget {
   }
 
   void _showJobDetailsBottomSheet(
-    BuildContext context,
+    BuildContext context, // original context here
     CustomerJobsEntity job,
   ) {
     final hasProfilePic = job.assignedTo?.profilePic?.isNotEmpty == true;
@@ -209,7 +209,8 @@ class CustomerRequestedJobs extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
+      builder: (BuildContext bottomSheetContext) {
+        // Use original 'context' for bloc access; use bottomSheetContext for Navigator.pop()
         return Padding(
           padding: const EdgeInsets.fromLTRB(16, 20, 16, 30),
           child: SingleChildScrollView(
@@ -365,8 +366,24 @@ class CustomerRequestedJobs extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: Accept Logic
-                          Navigator.pop(context);
+                          if (job.assignedTo != null &&
+                              job.assignedTo!.id != null) {
+                            context.read<CustomerRequestedJobsViewModel>().add(
+                              AcceptRequestedJobEvent(
+                                jobId: job.jobId.toString(),
+                                workerId: job.assignedTo!.id!,
+                                context: context,
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("No assigned worker to accept."),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                          Navigator.pop(bottomSheetContext);
                         },
                         icon: const Icon(Icons.check, color: Colors.white),
                         label: const Text("Accept"),
@@ -383,8 +400,13 @@ class CustomerRequestedJobs extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: Reject Logic
-                          Navigator.pop(context);
+                          context.read<CustomerRequestedJobsViewModel>().add(
+                            RejectRequestedJobEvent(
+                              jobId: job.jobId.toString(),
+                              context: context,
+                            ),
+                          );
+                          Navigator.pop(bottomSheetContext);
                         },
                         icon: const Icon(Icons.close, color: Colors.white),
                         label: const Text("Reject"),
