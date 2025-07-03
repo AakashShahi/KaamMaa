@@ -10,40 +10,69 @@ class CustomerJobsView extends StatelessWidget {
   const CustomerJobsView({super.key});
 
   List<Tab> get _tabs => const [
-    Tab(text: "Posted"),
-    Tab(text: "Assigned"),
-    Tab(text: "In Progress"),
-    Tab(text: "Requested"),
-    Tab(text: "Failed"),
+    Tab(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: Text("Posted"),
+      ),
+    ),
+    Tab(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: Text("Assigned"),
+      ),
+    ),
+    Tab(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: Text("In Progress"),
+      ),
+    ),
+    Tab(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: Text("Requested"),
+      ),
+    ),
+    Tab(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: Text("Failed"),
+      ),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 2, // "In Progress" tab default
       length: _tabs.length,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.primary.withOpacity(0.08),
             child: TabBar(
               isScrollable: true,
               indicatorColor: AppColors.primary,
               labelColor: AppColors.primary,
               unselectedLabelColor: Colors.black54,
-              labelStyle: const TextStyle(fontWeight: FontWeight.w600),
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
               tabs: _tabs,
             ),
           ),
           const SizedBox(height: 10),
-          Expanded(
+          const Expanded(
             child: TabBarView(
               children: [
-                const CustomerPostedJobs(),
-                const CustomerAssignedJobs(),
-                const CustomerInprogressJobs(),
-                const CustomerRequestedJobs(),
-                const CustomerFailedJobs(),
+                CustomerPostedJobs(),
+                CustomerAssignedJobs(),
+                CustomerInprogressJobs(),
+                CustomerRequestedJobs(),
+                CustomerFailedJobs(),
               ],
             ),
           ),

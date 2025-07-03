@@ -8,4 +8,5 @@ class AppColors {
   static const Color textPrimary = Colors.black;
   static const Color error = Color.fromARGB(255, 255, 17, 0);
   static const Color success = Color.fromARGB(255, 43, 255, 0);
+  static const Color textDark = Color(0xFF222222);
 }
