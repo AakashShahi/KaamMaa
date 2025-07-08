@@ -35,4 +35,7 @@ class ApiEndpoints {
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";
+
+  //Customer submit reviews
+  static const String postReview = "customer/jobs/review";
 }

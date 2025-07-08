@@ -34,6 +34,10 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_reviews/data/data_source/remote_data_source/customer_reviews_remote_datasource.dart';
+import 'package:kaammaa/features/customer/customer_reviews/data/repository/remote_repository/customer_reviews_remote_repository.dart';
+import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/post_review_usecase.dart';
+import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_reviews_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_workers/data/data_source/remote_datasource/customer_worker_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_workers/data/repository/remote_repository/customer_worker_remote_repository.dart';
 import 'package:kaammaa/features/customer/customer_workers/domain/use_case/get_matching_worker_usecase.dart';
@@ -63,6 +67,9 @@ Future initDependencies() async {
   await _initCustomerCategoryModule();
   // await _initCustomerAssignedJobModule();
   await _initCustomerHomeModule();
+
+  // Customer Reviews
+  await _initCustomerReviewModule();
 }
 
 // ________________________________________________________________
@@ -301,7 +308,7 @@ Future<void> _initCustomerJobsModule() async {
     ),
   );
 
-  serviceLocater.registerFactory(
+  serviceLocater.registerLazySingleton(
     () => CustomerInProgressJobsViewModel(
       serviceLocater<GetInprogressJobUsecase>(),
     ),
@@ -337,6 +344,35 @@ Future<void> _initCustomerHomeModule() async {
     () => CustomerHomeViewModel(
       getAllPublicJobsUsecase: serviceLocater<GetAllPublicJobsUsecase>(),
       getInprogressJobUsecase: serviceLocater<GetInprogressJobUsecase>(),
+    ),
+  );
+}
+
+Future<void> _initCustomerReviewModule() async {
+  serviceLocater.registerFactory(
+    () => CustomerReviewsRemoteDatasource(
+      apiService: serviceLocater<ApiService>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => CustomerReviewsRemoteRepository(
+      customerReviewsRemoteDatasource:
+          serviceLocater<CustomerReviewsRemoteDatasource>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => PostReviewUsecase(
+      customerReviewsRepository:
+          serviceLocater<CustomerReviewsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => SubmitReviewViewModel(
+      postReviewUsecase: serviceLocater<PostReviewUsecase>(),
     ),
   );
 }

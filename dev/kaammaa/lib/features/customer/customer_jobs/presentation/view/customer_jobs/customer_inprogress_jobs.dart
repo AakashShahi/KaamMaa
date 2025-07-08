@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaammaa/app/service_locater/service_locater.dart';
 import 'package:kaammaa/core/utils/backend_image_url.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/entity/customer_jobs_entity.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_state.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_reviews/presentation/view/submit_review_view.dart';
+import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_reviews_viewmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomerInprogressJobs extends StatelessWidget {
@@ -157,6 +160,37 @@ class CustomerInprogressJobs extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (_) => BlocProvider<SubmitReviewViewModel>(
+                          create:
+                              (_) => serviceLocater<SubmitReviewViewModel>(),
+                          child: SubmitReviewView(jobId: job.jobId!),
+                        ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.check_circle, color: Colors.white),
+              label: const Text(
+                "Mark as complete",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
