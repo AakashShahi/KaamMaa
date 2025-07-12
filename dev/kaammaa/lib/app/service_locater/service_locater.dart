@@ -308,7 +308,7 @@ Future<void> _initCustomerJobsModule() async {
     ),
   );
 
-  serviceLocater.registerLazySingleton(
+  serviceLocater.registerFactory(
     () => CustomerInProgressJobsViewModel(
       serviceLocater<GetInprogressJobUsecase>(),
     ),
