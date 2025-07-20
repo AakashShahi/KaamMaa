@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/app/service_locater/service_locater.dart';
 import 'package:kaammaa/core/common/app_alertdialog.dart';
 import 'package:kaammaa/core/utils/backend_image_url.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/entity/customer_jobs_entity.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view/worker_list_view.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_state.dart';
@@ -79,7 +80,7 @@ class CustomerPostedJobs extends StatelessWidget {
     );
   }
 
-  Widget _buildJobCard(BuildContext context, dynamic job) {
+  Widget _buildJobCard(BuildContext context, CustomerJobsEntity job) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 3,
@@ -164,8 +165,7 @@ class CustomerPostedJobs extends StatelessWidget {
                                           >(),
                                       child: WorkerListView(
                                         category:
-                                            job.category.categoryName
-                                                .toString(),
+                                            job.category.category.toString(),
                                         jobId: job.jobId.toString(),
                                       ),
                                     ),

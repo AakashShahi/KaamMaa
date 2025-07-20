@@ -35,7 +35,6 @@ class TokenSharedPrefs {
     }
   }
 
-  // Get role
   Future<Either<Failure, String?>> getRole() async {
     try {
       final role = _sharedPreferences.getString('role');
@@ -45,18 +44,58 @@ class TokenSharedPrefs {
     }
   }
 
-  //Logout
-  Future<Either<Failure, void>> logout() async {
+  // --- NEW: Save User ID ---
+  Future<Either<Failure, void>> saveUserId(String userId) async {
     try {
-      await _sharedPreferences.remove('token');
-      await _sharedPreferences.remove('role');
+      await _sharedPreferences.setString('userId', userId);
       return const Right(null);
     } catch (e) {
       return Left(SharedPreferenceFailure(message: e.toString()));
     }
   }
 
-  // (Optional) Check if user is logged in
+  // --- NEW: Get User ID ---
+  Future<Either<Failure, String?>> getUserId() async {
+    try {
+      final userId = _sharedPreferences.getString('userId');
+      return Right(userId);
+    } catch (e) {
+      return Left(SharedPreferenceFailure(message: e.toString()));
+    }
+  }
+
+  // --- NEW: Save User Name ---
+  Future<Either<Failure, void>> saveUserName(String name) async {
+    try {
+      await _sharedPreferences.setString('userName', name);
+      return const Right(null);
+    } catch (e) {
+      return Left(SharedPreferenceFailure(message: e.toString()));
+    }
+  }
+
+  // --- NEW: Get User Name ---
+  Future<Either<Failure, String?>> getUserName() async {
+    try {
+      final name = _sharedPreferences.getString('userName');
+      return Right(name);
+    } catch (e) {
+      return Left(SharedPreferenceFailure(message: e.toString()));
+    }
+  }
+
+  Future<Either<Failure, void>> logout() async {
+    try {
+      await _sharedPreferences.remove('token');
+      await _sharedPreferences.remove('role');
+      await _sharedPreferences.remove('userId'); // Clear userId on logout
+      await _sharedPreferences.remove('userName'); // Clear userName on logout
+      return const Right(null);
+    } catch (e) {
+      return Left(SharedPreferenceFailure(message: e.toString()));
+    }
+  }
+
   Future<bool> isLoggedIn() async {
     final token = _sharedPreferences.getString('token');
     return token != null && token.isNotEmpty;

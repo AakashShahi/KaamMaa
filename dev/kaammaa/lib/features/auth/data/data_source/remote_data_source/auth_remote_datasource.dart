@@ -5,6 +5,7 @@ import 'package:kaammaa/app/shared_pref/token_shared_prefs.dart';
 import 'package:kaammaa/core/network/api_service.dart';
 import 'package:kaammaa/features/auth/data/data_source/auth_data_source.dart';
 import 'package:kaammaa/features/auth/data/model/auth_api_model.dart';
+import 'package:kaammaa/features/auth/data/model/login_response_model.dart';
 import 'package:kaammaa/features/auth/domain/entity/auth_entity.dart';
 
 class AuthRemoteDatasource implements IAuthDataSource {
@@ -18,7 +19,11 @@ class AuthRemoteDatasource implements IAuthDataSource {
        _tokenSharedPrefs = tokenSharedPrefs;
 
   @override
-  Future<String> loginUser(String identifier, String password) async {
+  Future<LoginResponseModel> loginUser(
+    String identifier,
+    String password,
+  ) async {
+    // Changed return type
     try {
       final isEmail = RegExp(
         r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
@@ -35,14 +40,33 @@ class AuthRemoteDatasource implements IAuthDataSource {
       );
 
       if (response.statusCode == 200) {
-        final role = response.data["data"]["role"];
+        // Assume backend response structure:
+        // { "token": "...", "data": { "_id": "userId", "name": "UserName", "role": "..." } }
+        final responseData = response.data; // Get the full response body map
+
+        final token = responseData["token"];
+        final userData =
+            responseData["data"]; // This should be the map containing user details
+
+        final userId = userData["_id"]; // Extract userId
+        final name = userData["name"]; // Extract name
+        final role = userData["role"]; // Extract role
+
+        // Save role immediately if AuthRemoteDatasource is still doing it
+        // It's generally better to let the Usecase handle all shared_prefs saves
         final roleResult = await _tokenSharedPrefs.saveRole(role);
         roleResult.fold(
           (failure) => debugPrint("Failed to save role: ${failure.message}"),
           (_) => debugPrint("Role saved"),
         );
 
-        return response.data["token"];
+        // Return the new LoginResponseModel
+        return LoginResponseModel(
+          token: token,
+          userId: userId,
+          name: name,
+          role: role,
+        );
       } else {
         throw Exception("Failed to login: ${response.statusMessage}");
       }
@@ -56,7 +80,6 @@ class AuthRemoteDatasource implements IAuthDataSource {
   @override
   Future<void> registerUser(AuthEntity user) async {
     try {
-      // COnvert to api model
       final authApiModel = AuthApiModel.fromEntity(user);
       final response = await _apiService.dio.post(
         ApiEndpoints.register,
@@ -71,7 +94,7 @@ class AuthRemoteDatasource implements IAuthDataSource {
     } on DioException catch (e) {
       throw Exception("Failed to register:${e.message}");
     } catch (e) {
-      throw Exception("An unexpected error occured: $e");
+      throw Exception("An unexpected error occurred: $e");
     }
   }
 }

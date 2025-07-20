@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:kaammaa/core/error/failure.dart';
 import 'package:kaammaa/features/auth/data/data_source/remote_data_source/auth_remote_datasource.dart';
+import 'package:kaammaa/features/auth/data/model/login_response_model.dart';
 import 'package:kaammaa/features/auth/domain/entity/auth_entity.dart';
 import 'package:kaammaa/features/auth/domain/repository/auth_repository.dart';
 
@@ -11,14 +12,21 @@ class AuthRemoteRepository implements IAuthRepository {
     : _authRemoteDatasource = authRemoteDataSource;
 
   @override
-  Future<Either<Failure, String>> loginUser(
+  // CHANGE 1: Update the return type to Future<Either<Failure, LoginResponseModel>>
+  Future<Either<Failure, LoginResponseModel>> loginUser(
     String identifier,
     String password,
   ) async {
     try {
-      final user = await _authRemoteDatasource.loginUser(identifier, password);
-      return Right(user);
+      // CHANGE 2: The datasource now returns LoginResponseModel
+      final loginResponse = await _authRemoteDatasource.loginUser(
+        identifier,
+        password,
+      );
+      // CHANGE 3: Return Right with the LoginResponseModel
+      return Right(loginResponse);
     } catch (e) {
+      // Keep error handling consistent
       return Left(ApiFailure(message: e.toString()));
     }
   }
