@@ -18,6 +18,7 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view/customer_profile_view.dart';
+import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view/customer_reviews_view.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_viewmodel.dart';
 
@@ -70,7 +71,10 @@ class CustomerDashboardViewModel
               value: serviceLocater<CustomerGetReviewsViewModel>(),
               child: CustomerReviewsView(),
             ),
-            CustomerProfileView(),
+            BlocProvider.value(
+              value: serviceLocater<CustomerProfileViewModel>(),
+              child: CustomerProfileView(),
+            ),
           ],
         ),
       ) {

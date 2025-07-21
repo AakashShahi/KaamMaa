@@ -35,6 +35,7 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/data_source/remote_data_source/customer_reviews_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/repository/remote_repository/customer_reviews_remote_repository.dart';
 import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/delete_all_review_usecase.dart';
@@ -75,6 +76,8 @@ Future initDependencies() async {
 
   // Customer Reviews
   await _initCustomerReviewModule();
+
+  await _initCustomerProfileModule();
 }
 
 // ________________________________________________________________
@@ -418,6 +421,12 @@ Future<void> _initCustomerReviewModule() async {
       deleteAllReviewUsecase: serviceLocater<DeleteAllReviewUsecase>(),
       deleteReviewUsecase: serviceLocater<DeleteReviewUsecase>(),
     ),
+  );
+}
+
+Future<void> _initCustomerProfileModule() async {
+  serviceLocater.registerFactory(
+    () => CustomerProfileViewModel(serviceLocater<GetCurrentUserUsecase>()),
   );
 }
 
