@@ -28,4 +28,33 @@ class CustomerReviewsRemoteRepository implements ICustomerReviewsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, List<CustomerReviewsEntity>>> getReviews(
+    String? token,
+  ) async {
+    try {
+      final reviews = await _customerReviewsRemoteDatasource.getReviews(token);
+      return Right(reviews);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to fetch review: ${e.toString()}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteOneReview(
+    String? token,
+    String? reviewId,
+  ) {
+    // TODO: implement deleteOneReview
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAllReview(String? token) {
+    // TODO: implement deleteAllReview
+    throw UnimplementedError();
+  }
 }

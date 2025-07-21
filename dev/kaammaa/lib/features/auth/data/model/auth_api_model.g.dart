@@ -21,6 +21,7 @@ AuthApiModel _$AuthApiModelFromJson(Map<String, dynamic> json) => AuthApiModel(
       certificateUrl: json['certificateUrl'] as String?,
       isVerified: json['isVerified'] as bool?,
       phone: json['phone'] as String,
+      profilePic: json['profilePic'] as String?,
     );
 
 Map<String, dynamic> _$AuthApiModelToJson(AuthApiModel instance) =>
@@ -38,4 +39,5 @@ Map<String, dynamic> _$AuthApiModelToJson(AuthApiModel instance) =>
       'certificateUrl': instance.certificateUrl,
       'isVerified': instance.isVerified,
       'phone': instance.phone,
+      'profilePic': instance.profilePic,
     };

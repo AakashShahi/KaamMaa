@@ -16,6 +16,7 @@ class AuthEntity extends Equatable {
   final File? certificateUrl;
   final String? isVerified;
   final String phone;
+  final String? profilePic;
 
   const AuthEntity({
     this.userId,
@@ -31,6 +32,7 @@ class AuthEntity extends Equatable {
     this.isVerified,
     this.profession,
     this.location,
+    this.profilePic,
   });
 
   @override
@@ -48,5 +50,6 @@ class AuthEntity extends Equatable {
     isVerified,
     profession,
     location,
+    profilePic,
   ];
 }

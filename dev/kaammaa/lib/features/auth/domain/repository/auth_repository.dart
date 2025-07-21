@@ -11,4 +11,6 @@ abstract interface class IAuthRepository {
     String identifier,
     String password,
   );
+
+  Future<Either<Failure, AuthEntity>> getCurrentUser(String? token);
 }

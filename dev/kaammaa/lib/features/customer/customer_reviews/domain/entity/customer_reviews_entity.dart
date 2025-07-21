@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:kaammaa/features/customer/customer_workers/domain/entity/customer_worker_entity.dart';
 
 class CustomerReviewsEntity extends Equatable {
   final String? reviewId;
   final String? jobId;
-  final String? workerId;
+  final CustomerWorkerEntity? workerId;
   final String? customerId;
   final double rating;
   final String? comment;

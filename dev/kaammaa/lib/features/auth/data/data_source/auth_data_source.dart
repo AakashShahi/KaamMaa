@@ -6,4 +6,6 @@ abstract interface class IAuthDataSource {
 
   // Change return type to LoginResponseModel
   Future<LoginResponseModel> loginUser(String identifier, String password);
+
+  Future<AuthEntity> getCurrentUser(String? token);
 }

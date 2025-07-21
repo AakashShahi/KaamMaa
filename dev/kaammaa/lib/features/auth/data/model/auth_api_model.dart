@@ -20,6 +20,7 @@ class AuthApiModel extends Equatable {
   final String? certificateUrl;
   final bool? isVerified;
   final String phone;
+  final String? profilePic;
 
   const AuthApiModel({
     this.userId,
@@ -35,6 +36,7 @@ class AuthApiModel extends Equatable {
     this.certificateUrl,
     this.isVerified,
     required this.phone,
+    this.profilePic,
   });
 
   /// Convert JSON to model
@@ -59,6 +61,7 @@ class AuthApiModel extends Equatable {
     isVerified: isVerified?.toString(),
     phone: phone,
     profession: profession,
+    profilePic: profilePic,
   );
 
   /// Convert single entity to API model
@@ -76,6 +79,7 @@ class AuthApiModel extends Equatable {
     isVerified: entity.isVerified?.toLowerCase() == 'true',
     phone: entity.phone,
     profession: entity.profession,
+    profilePic: entity.profilePic,
   );
 
   /// Convert a list of models to a list of entities
@@ -98,5 +102,6 @@ class AuthApiModel extends Equatable {
     certificateUrl,
     isVerified,
     phone,
+    profilePic,
   ];
 }

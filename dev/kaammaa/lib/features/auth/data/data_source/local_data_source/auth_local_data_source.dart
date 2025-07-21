@@ -25,4 +25,10 @@ class AuthLocalDataSource implements IAuthDataSource {
     // TODO: implement loginUser
     throw UnimplementedError();
   }
+
+  @override
+  Future<AuthEntity> getCurrentUser(String? token) {
+    // TODO: implement getCurrentUser
+    throw UnimplementedError();
+  }
 }

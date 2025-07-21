@@ -32,10 +32,14 @@ class ApiEndpoints {
   static const String acceptRequestedJob = "customer/jobs/accept-worker";
   static const String rejectRequestedJob = "customer/jobs/reject-worker";
   static const String getInProgressJob = "customer/jobs/in-progress";
+  static const String getCustomer = "customer/me";
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";
 
   //Customer submit reviews
   static const String postReview = "customer/jobs/review";
+  static const String getReview = "customer/review";
+  static const String deleteReview = "customer/review";
+  static const String deleteAllReview = "customer/review";
 }

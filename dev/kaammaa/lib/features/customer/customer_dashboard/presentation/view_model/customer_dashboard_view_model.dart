@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/app/service_locater/service_locater.dart';
+import 'package:kaammaa/features/auth/domain/use_case/get_current_user_usecase.dart';
 import 'package:kaammaa/features/customer/customer_home/presentation/view_model/customer_home_event.dart';
 import 'package:kaammaa/features/customer/customer_home/presentation/view_model/customer_home_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_event.dart';
@@ -18,9 +19,13 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view/customer_profile_view.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view/customer_reviews_view.dart';
+import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_viewmodel.dart';
 
 class CustomerDashboardViewModel
     extends Bloc<CustomerDashboardEvent, CustomerDashboardState> {
+  final GetCurrentUserUsecase _getCurrentUserUsecase =
+      serviceLocater<GetCurrentUserUsecase>();
+
   CustomerDashboardViewModel()
     : super(
         CustomerDashboardState(
@@ -61,12 +66,19 @@ class CustomerDashboardViewModel
               value: serviceLocater<CustomerPostJobsViewModel>(),
               child: CustomerPostJobsView(),
             ),
-            CustomerReviewsView(),
+            BlocProvider.value(
+              value: serviceLocater<CustomerGetReviewsViewModel>(),
+              child: CustomerReviewsView(),
+            ),
             CustomerProfileView(),
           ],
         ),
       ) {
     on<ChangeCustomerTabEvent>(_onChangeTab);
+    on<LoadCustomerUserEvent>(_onLoadCustomerUser);
+
+    // Load user when initialized
+    add(LoadCustomerUserEvent());
   }
 
   void _onChangeTab(
@@ -74,5 +86,25 @@ class CustomerDashboardViewModel
     Emitter<CustomerDashboardState> emit,
   ) {
     emit(state.copyWith(selectedIndex: event.newIndex));
+  }
+
+  Future<void> _onLoadCustomerUser(
+    LoadCustomerUserEvent event,
+    Emitter<CustomerDashboardState> emit,
+  ) async {
+    final result = await _getCurrentUserUsecase.call();
+    result.fold(
+      (failure) {
+        // Handle error if needed
+      },
+      (user) {
+        emit(
+          state.copyWith(
+            userName: user.name ?? 'Customer',
+            userPhoto: user.profilePic,
+          ),
+        );
+      },
+    );
   }
 }

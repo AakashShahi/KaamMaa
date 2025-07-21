@@ -5,4 +5,10 @@ abstract interface class ICustomerReviewsDatasource {
     String? token,
     CustomerReviewsEntity customerReviewsEntity,
   );
+
+  Future<List<CustomerReviewsEntity>> getReviews(String? token);
+
+  Future<void> deleteOneReview(String? token, String? reviewId);
+
+  Future<void> deleteAllReview(String? token);
 }

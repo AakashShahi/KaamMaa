@@ -42,4 +42,10 @@ class AuthLocalRepository implements IAuthRepository {
     // TODO: implement loginUser
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, AuthEntity>> getCurrentUser(String? token) {
+    // TODO: implement getCurrentUser
+    throw UnimplementedError();
+  }
 }

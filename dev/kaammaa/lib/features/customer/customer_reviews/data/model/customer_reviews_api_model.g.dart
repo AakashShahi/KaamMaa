@@ -11,7 +11,10 @@ CustomerReviewsApiModel _$CustomerReviewsApiModelFromJson(
     CustomerReviewsApiModel(
       reviewId: json['_id'] as String?,
       jobId: json['jobId'] as String?,
-      workerId: json['workerId'] as String?,
+      workerId: json['workerId'] == null
+          ? null
+          : CustomerWorkerApiModel.fromJson(
+              json['workerId'] as Map<String, dynamic>),
       customerId: json['customerId'] as String?,
       rating: (json['rating'] as num).toDouble(),
       comment: json['comment'] as String?,

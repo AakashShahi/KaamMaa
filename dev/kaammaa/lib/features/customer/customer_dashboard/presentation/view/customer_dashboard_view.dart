@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaammaa/core/common/app_colors.dart';
+import 'package:kaammaa/core/utils/backend_image_url.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_event.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_state.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_view_model.dart';
@@ -17,11 +18,13 @@ class CustomerDashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String userName = "Customer";
     final greeting = _getGreeting();
 
     return BlocBuilder<CustomerDashboardViewModel, CustomerDashboardState>(
       builder: (context, state) {
+        final userName = state.userName ?? "Customer";
+        final userPhoto = state.userPhoto;
+
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
           appBar: PreferredSize(
@@ -43,7 +46,16 @@ class CustomerDashboardView extends StatelessWidget {
                     CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.white,
-                      child: CircleAvatar(radius: 27),
+                      child: CircleAvatar(
+                        radius: 27,
+                        backgroundImage:
+                            userPhoto != null
+                                ? NetworkImage(getBackendImageUrl(userPhoto))
+                                : const AssetImage(
+                                      'assets/images/default_profile.png',
+                                    )
+                                    as ImageProvider,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -133,46 +145,27 @@ class CustomerDashboardView extends StatelessWidget {
               fontSize: 12,
               letterSpacing: 0.15,
             ),
-            items: [
-              const BottomNavigationBarItem(
+            items: const [
+              BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home_rounded),
                 label: "Home",
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.work_outline),
                 activeIcon: Icon(Icons.work_rounded),
                 label: "Jobs",
               ),
               BottomNavigationBarItem(
-                icon: Container(
-                  margin: const EdgeInsets.only(
-                    bottom: 10,
-                  ), // To raise it a bit
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primary,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Icon(Icons.add, size: 34, color: Colors.white),
-                  ),
-                ),
+                icon: Icon(Icons.add_circle, size: 34),
                 label: "Create Job",
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.rate_review_outlined),
                 activeIcon: Icon(Icons.rate_review_rounded),
                 label: "Reviews",
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline),
                 activeIcon: Icon(Icons.person_rounded),
                 label: "Profile",

@@ -7,4 +7,15 @@ abstract interface class ICustomerReviewsRepository {
     String? token,
     CustomerReviewsEntity customerReviewsEntity,
   );
+
+  Future<Either<Failure, List<CustomerReviewsEntity>>> getReviews(
+    String? token,
+  );
+
+  Future<Either<Failure, void>> deleteOneReview(
+    String? token,
+    String? reviewId,
+  );
+
+  Future<Either<Failure, void>> deleteAllReview(String? token);
 }

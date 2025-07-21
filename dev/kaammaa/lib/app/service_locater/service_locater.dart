@@ -9,6 +9,7 @@ import 'package:kaammaa/features/auth/data/repository/local_repository/auth_loca
 import 'package:kaammaa/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_register_usecase.dart';
+import 'package:kaammaa/features/auth/domain/use_case/get_current_user_usecase.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:kaammaa/features/customer/customer_home/presentation/view_model/customer_home_viewmodel.dart';
@@ -36,7 +37,9 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/data_source/remote_data_source/customer_reviews_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/repository/remote_repository/customer_reviews_remote_repository.dart';
+import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/get_all_review_usecase.dart';
 import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/post_review_usecase.dart';
+import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_reviews_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_workers/data/data_source/remote_datasource/customer_worker_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_workers/data/repository/remote_repository/customer_worker_remote_repository.dart';
@@ -143,6 +146,13 @@ Future _initAuthModule() async {
   serviceLocater.registerFactory(
     () => AuthRegisterUsecase(
       authRepository: serviceLocater<AuthRemoteRepository>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => GetCurrentUserUsecase(
+      authRepository: serviceLocater<AuthRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
     ),
   );
 
@@ -373,6 +383,20 @@ Future<void> _initCustomerReviewModule() async {
   serviceLocater.registerFactory(
     () => SubmitReviewViewModel(
       postReviewUsecase: serviceLocater<PostReviewUsecase>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => GetAllReviewUsecase(
+      customerReviewsRepository:
+          serviceLocater<CustomerReviewsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => CustomerGetReviewsViewModel(
+      getAllReviewUsecase: serviceLocater<GetAllReviewUsecase>(),
     ),
   );
 }

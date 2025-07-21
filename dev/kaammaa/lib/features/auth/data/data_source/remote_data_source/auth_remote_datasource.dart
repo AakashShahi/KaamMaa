@@ -97,4 +97,27 @@ class AuthRemoteDatasource implements IAuthDataSource {
       throw Exception("An unexpected error occurred: $e");
     }
   }
+
+  @override
+  Future<AuthEntity> getCurrentUser(String? token) async {
+    try {
+      final response = await _apiService.dio.get(
+        ApiEndpoints.getCustomer,
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      if (response.statusCode == 200) {
+        final userData = response.data['data'];
+        return AuthApiModel.fromJson(userData).toEntity();
+      } else {
+        throw Exception(
+          "Failed to fetch current user: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to get data:${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
 }

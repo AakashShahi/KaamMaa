@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaammaa/features/customer/customer_reviews/domain/entity/customer_reviews_entity.dart';
+import 'package:kaammaa/features/customer/customer_workers/data/model/customer_worker_api_model.dart';
+import 'package:kaammaa/features/customer/customer_workers/domain/entity/customer_worker_entity.dart';
 
 part 'customer_reviews_api_model.g.dart';
 
@@ -10,7 +12,7 @@ class CustomerReviewsApiModel extends Equatable {
   final String? reviewId;
 
   final String? jobId;
-  final String? workerId;
+  final CustomerWorkerApiModel? workerId;
   final String? customerId;
   final double rating;
   final String? comment;
@@ -41,7 +43,7 @@ class CustomerReviewsApiModel extends Equatable {
     return CustomerReviewsEntity(
       reviewId: reviewId,
       jobId: jobId,
-      workerId: workerId,
+      workerId: workerId?.toEntity() ?? const CustomerWorkerEntity.empty(),
       customerId: customerId,
       rating: rating,
       comment: comment,
@@ -56,7 +58,6 @@ class CustomerReviewsApiModel extends Equatable {
     return CustomerReviewsApiModel(
       reviewId: entity.reviewId,
       jobId: entity.jobId,
-      workerId: entity.workerId,
       customerId: entity.customerId,
       rating: entity.rating,
       comment: entity.comment,
