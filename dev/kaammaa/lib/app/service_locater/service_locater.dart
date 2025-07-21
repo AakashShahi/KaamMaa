@@ -37,6 +37,8 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/data_source/remote_data_source/customer_reviews_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/repository/remote_repository/customer_reviews_remote_repository.dart';
+import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/delete_all_review_usecase.dart';
+import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/delete_review_usecase.dart';
 import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/get_all_review_usecase.dart';
 import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/post_review_usecase.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_viewmodel.dart';
@@ -395,8 +397,26 @@ Future<void> _initCustomerReviewModule() async {
   );
 
   serviceLocater.registerFactory(
+    () => DeleteReviewUsecase(
+      customerReviewsRepository:
+          serviceLocater<CustomerReviewsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => DeleteAllReviewUsecase(
+      customerReviewsRepository:
+          serviceLocater<CustomerReviewsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
     () => CustomerGetReviewsViewModel(
       getAllReviewUsecase: serviceLocater<GetAllReviewUsecase>(),
+      deleteAllReviewUsecase: serviceLocater<DeleteAllReviewUsecase>(),
+      deleteReviewUsecase: serviceLocater<DeleteReviewUsecase>(),
     ),
   );
 }

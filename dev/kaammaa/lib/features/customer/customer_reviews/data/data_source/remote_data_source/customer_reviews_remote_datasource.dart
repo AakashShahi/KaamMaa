@@ -68,14 +68,48 @@ class CustomerReviewsRemoteDatasource implements ICustomerReviewsDatasource {
   }
 
   @override
-  Future<void> deleteOneReview(String? token, String? reviewId) {
-    // TODO: implement deleteOneReview
-    throw UnimplementedError();
+  Future<void> deleteOneReview(String? token, String? reviewId) async {
+    try {
+      final response = await _apiService.dio.delete(
+        "${ApiEndpoints.deleteReview}/$reviewId/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Future.value();
+      } else {
+        // Handle unexpected status codes
+        throw Exception("Failed to delete reviews: ${response.statusMessage}");
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to delete review: ${e.message}");
+    } catch (e) {
+      throw Exception(
+        "An unexpected error occurred while deleting reviews: $e",
+      );
+    }
   }
 
   @override
-  Future<void> deleteAllReview(String? token) {
-    // TODO: implement deleteAllReview
-    throw UnimplementedError();
+  Future<void> deleteAllReview(String? token) async {
+    try {
+      final response = await _apiService.dio.delete(
+        "${ApiEndpoints.deleteAllReview}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Future.value();
+      } else {
+        // Handle unexpected status codes
+        throw Exception(
+          "Failed to delete all reviews: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to delete review: ${e.message}");
+    } catch (e) {
+      throw Exception(
+        "An unexpected error occurred while deleting reviews: $e",
+      );
+    }
   }
 }

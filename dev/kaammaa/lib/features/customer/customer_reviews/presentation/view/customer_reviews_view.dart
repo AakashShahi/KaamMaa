@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:kaammaa/core/common/app_alertdialog.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_event.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_state.dart';
 import 'package:kaammaa/features/customer/customer_reviews/presentation/view_model/customer_get_reviews_viewmodel/customer_get_reviews_viewmodel.dart';
@@ -28,7 +29,22 @@ class CustomerReviewsView extends StatelessWidget {
           alignment: Alignment.topRight,
           child: TextButton.icon(
             onPressed: () {
-              // TODO: Implement delete all
+              showDialog(
+                context: context,
+                builder:
+                    (ctx) => AppAlertDialog(
+                      title: "Delete All Reviews",
+                      message: "Are you sure you want to delete all reviews?",
+                      confirmText: "Yes, Delete",
+                      cancelText: "Cancel",
+                      onConfirmed: () {
+                        Navigator.pop(ctx);
+                        context.read<CustomerGetReviewsViewModel>().add(
+                          DeleteAllCustomerReviewsEvent(),
+                        );
+                      },
+                    ),
+              );
             },
             icon: const Icon(Icons.delete_forever, color: Colors.red),
             label: const Text(
@@ -79,7 +95,30 @@ class CustomerReviewsView extends StatelessWidget {
                                     color: Colors.red,
                                   ),
                                   onPressed: () {
-                                    // TODO: Implement single delete
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (ctx) => AppAlertDialog(
+                                            title: "Delete Review",
+                                            message:
+                                                "Are you sure you want to delete this review?",
+                                            confirmText: "Delete",
+                                            cancelText: "Cancel",
+                                            onConfirmed: () {
+                                              Navigator.pop(ctx);
+                                              context
+                                                  .read<
+                                                    CustomerGetReviewsViewModel
+                                                  >()
+                                                  .add(
+                                                    DeleteSingleCustomerReviewEvent(
+                                                      review.reviewId
+                                                          .toString(),
+                                                    ),
+                                                  );
+                                            },
+                                          ),
+                                    );
                                   },
                                 ),
                               ],

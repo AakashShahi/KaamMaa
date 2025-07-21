@@ -47,14 +47,26 @@ class CustomerReviewsRemoteRepository implements ICustomerReviewsRepository {
   Future<Either<Failure, void>> deleteOneReview(
     String? token,
     String? reviewId,
-  ) {
-    // TODO: implement deleteOneReview
-    throw UnimplementedError();
+  ) async {
+    try {
+      await _customerReviewsRemoteDatasource.deleteOneReview(token, reviewId);
+      return Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to delete review: ${e.toString()}"),
+      );
+    }
   }
 
   @override
-  Future<Either<Failure, void>> deleteAllReview(String? token) {
-    // TODO: implement deleteAllReview
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deleteAllReview(String? token) async {
+    try {
+      await _customerReviewsRemoteDatasource.deleteAllReview(token);
+      return Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to delete all review: ${e.toString()}"),
+      );
+    }
   }
 }
