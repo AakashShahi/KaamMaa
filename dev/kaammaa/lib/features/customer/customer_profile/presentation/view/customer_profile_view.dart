@@ -4,6 +4,7 @@ import 'package:kaammaa/app/service_locater/service_locater.dart';
 import 'package:kaammaa/app/shared_pref/token_shared_prefs.dart';
 import 'package:kaammaa/core/common/app_alertdialog.dart';
 import 'package:kaammaa/core/common/app_colors.dart';
+import 'package:kaammaa/core/common/shake_detector.dart';
 import 'package:kaammaa/core/utils/backend_image_url.dart';
 import 'package:kaammaa/features/auth/presentation/view/login_view.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
@@ -13,9 +14,42 @@ import 'package:kaammaa/features/customer/customer_profile/presentation/view/ter
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_event.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_state.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_viewmodel.dart';
+import 'package:local_auth/local_auth.dart';
 
-class CustomerProfileView extends StatelessWidget {
+class CustomerProfileView extends StatefulWidget {
   const CustomerProfileView({super.key});
+
+  @override
+  State<CustomerProfileView> createState() => _CustomerProfileViewState();
+}
+
+class _CustomerProfileViewState extends State<CustomerProfileView> {
+  late final ShakeDetector _shakeDetector;
+  final LocalAuthentication _localAuth = LocalAuthentication();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Load user profile
+    Future.microtask(() {
+      context.read<CustomerProfileViewModel>().add(FetchCustomerProfileEvent());
+    });
+
+    // Setup shake detector to show logout dialog
+    _shakeDetector = ShakeDetector(
+      onPhoneShake: () {
+        _showLogoutDialog(context);
+      },
+    );
+    _shakeDetector.startListening();
+  }
+
+  @override
+  void dispose() {
+    _shakeDetector.stopListening();
+    super.dispose();
+  }
 
   Future<void> _logout(BuildContext context) async {
     final tokenSharedPrefs = serviceLocater<TokenSharedPrefs>();
@@ -23,7 +57,6 @@ class CustomerProfileView extends StatelessWidget {
 
     result.fold(
       (failure) {
-        // Optional: Show snackbar/toast
         print('Logout failed: ${failure.message}');
       },
       (_) {
@@ -47,23 +80,58 @@ class CustomerProfileView extends StatelessWidget {
       builder:
           (_) => AppAlertDialog(
             title: "Confirm Logout",
-            message: "Are you sure you want to logout?",
+            message: "Shake detected. Do you want to logout?",
             confirmText: "Logout",
             cancelText: "Cancel",
             onConfirmed: () {
-              Navigator.pop(context); // Close the dialog
-              _logout(context); // Perform logout
+              Navigator.pop(context);
+              _logout(context);
             },
           ),
     );
   }
 
+  Future<bool> _authenticate() async {
+    try {
+      final canCheckBiometrics = await _localAuth.canCheckBiometrics;
+      final availableBiometrics = await _localAuth.getAvailableBiometrics();
+      final isDeviceSupported = await _localAuth.isDeviceSupported();
+
+      print('canCheckBiometrics: $canCheckBiometrics');
+      print('availableBiometrics: $availableBiometrics');
+      print('isDeviceSupported: $isDeviceSupported');
+
+      if (!canCheckBiometrics || !isDeviceSupported) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Biometric authentication not available'),
+          ),
+        );
+        return false;
+      }
+
+      final didAuthenticate = await _localAuth.authenticate(
+        localizedReason: 'Please authenticate to access Profile Settings',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false, // fallback allowed
+        ),
+      );
+
+      print('didAuthenticate: $didAuthenticate');
+      return didAuthenticate;
+    } catch (e, stacktrace) {
+      print('Error during biometric authentication: $e');
+      print('Stacktrace: $stacktrace');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Authentication error: $e')));
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future.microtask(() {
-      context.read<CustomerProfileViewModel>().add(FetchCustomerProfileEvent());
-    });
-
     return BlocBuilder<CustomerProfileViewModel, CustomerProfileState>(
       builder: (context, state) {
         if (state is CustomerProfileLoading) {
@@ -99,13 +167,22 @@ class CustomerProfileView extends StatelessWidget {
                     _buildListTile(
                       icon: Icons.settings,
                       title: "Profile Settings",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ProfileSettingView(),
-                          ),
-                        );
+                      onTap: () async {
+                        final authenticated = await _authenticate();
+                        if (authenticated) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ProfileSettingView(),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Authentication failed'),
+                            ),
+                          );
+                        }
                       },
                     ),
                     _buildListTile(
