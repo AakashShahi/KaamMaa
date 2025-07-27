@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:kaammaa/core/network/hive_service.dart';
 import 'package:kaammaa/features/auth/data/data_source/auth_data_source.dart';
 import 'package:kaammaa/features/auth/data/model/auth_hive_model.dart';
@@ -29,6 +31,17 @@ class AuthLocalDataSource implements IAuthDataSource {
   @override
   Future<AuthEntity> getCurrentUser(String? token) {
     // TODO: implement getCurrentUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateUser(
+    String? name,
+    String? password,
+    File? profilePic,
+    String? token,
+  ) {
+    // TODO: implement updateUser
     throw UnimplementedError();
   }
 }

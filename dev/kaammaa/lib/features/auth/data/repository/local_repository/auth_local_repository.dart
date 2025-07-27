@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:kaammaa/core/error/failure.dart';
 import 'package:kaammaa/features/auth/data/data_source/local_data_source/auth_local_data_source.dart';
@@ -46,6 +48,17 @@ class AuthLocalRepository implements IAuthRepository {
   @override
   Future<Either<Failure, AuthEntity>> getCurrentUser(String? token) {
     // TODO: implement getCurrentUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUser(
+    String? name,
+    String? password,
+    File? profilePic,
+    String? token,
+  ) {
+    // TODO: implement updateUser
     throw UnimplementedError();
   }
 }

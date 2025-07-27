@@ -14,6 +14,7 @@ import 'package:kaammaa/features/customer/customer_profile/presentation/view/ter
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_event.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_state.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/cutsomer_profile_setting_viewmodel/profile_setting_viewmodel.dart';
 import 'package:local_auth/local_auth.dart';
 
 class CustomerProfileView extends StatefulWidget {
@@ -173,7 +174,15 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const ProfileSettingView(),
+                              builder:
+                                  (_) => BlocProvider(
+                                    create:
+                                        (_) =>
+                                            serviceLocater<
+                                              ProfileSettingViewModel
+                                            >(),
+                                    child: const ProfileSettingView(),
+                                  ),
                             ),
                           );
                         } else {
@@ -222,7 +231,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                   icon: const Icon(Icons.logout),
                   label: const Text("Logout"),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: AppColors.error,
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 45),
                     shape: RoundedRectangleBorder(

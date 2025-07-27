@@ -33,6 +33,7 @@ class ApiEndpoints {
   static const String rejectRequestedJob = "customer/jobs/reject-worker";
   static const String getInProgressJob = "customer/jobs/in-progress";
   static const String getCustomer = "customer/me";
+  static const String updateCustomer = "customer/me";
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";

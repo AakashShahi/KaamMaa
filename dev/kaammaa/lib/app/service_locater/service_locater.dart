@@ -9,6 +9,7 @@ import 'package:kaammaa/features/auth/data/repository/local_repository/auth_loca
 import 'package:kaammaa/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_register_usecase.dart';
+import 'package:kaammaa/features/auth/domain/use_case/auth_update_customer_usecase.dart';
 import 'package:kaammaa/features/auth/domain/use_case/get_current_user_usecase.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
@@ -36,6 +37,7 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_requested_jobs_viewmodel/customer_requested_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/worker_list_viewmodel/worker_list_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/customer_profile_viewmodel.dart';
+import 'package:kaammaa/features/customer/customer_profile/presentation/view_model/cutsomer_profile_setting_viewmodel/profile_setting_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/data_source/remote_data_source/customer_reviews_remote_datasource.dart';
 import 'package:kaammaa/features/customer/customer_reviews/data/repository/remote_repository/customer_reviews_remote_repository.dart';
 import 'package:kaammaa/features/customer/customer_reviews/domain/use_case/delete_all_review_usecase.dart';
@@ -156,6 +158,13 @@ Future _initAuthModule() async {
 
   serviceLocater.registerFactory(
     () => GetCurrentUserUsecase(
+      authRepository: serviceLocater<AuthRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => AuthUpdateCustomerUsecase(
       authRepository: serviceLocater<AuthRemoteRepository>(),
       tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
     ),
@@ -427,6 +436,13 @@ Future<void> _initCustomerReviewModule() async {
 Future<void> _initCustomerProfileModule() async {
   serviceLocater.registerFactory(
     () => CustomerProfileViewModel(serviceLocater<GetCurrentUserUsecase>()),
+  );
+
+  serviceLocater.registerFactory(
+    () => ProfileSettingViewModel(
+      getCurrentUserUsecase: serviceLocater<GetCurrentUserUsecase>(),
+      authUpdateCustomerUsecase: serviceLocater<AuthUpdateCustomerUsecase>(),
+    ),
   );
 }
 

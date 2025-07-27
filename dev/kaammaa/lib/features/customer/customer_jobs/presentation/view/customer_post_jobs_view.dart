@@ -149,7 +149,7 @@ class _CustomerPostJobsViewState extends State<CustomerPostJobsView> {
                                 .map(
                                   (e) => DropdownMenuItem(
                                     value: e,
-                                    child: Text(e.categoryName ?? 'Unknown'),
+                                    child: Text(e.category ?? 'Unknown'),
                                   ),
                                 )
                                 .toList(),

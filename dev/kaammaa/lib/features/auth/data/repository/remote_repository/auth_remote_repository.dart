@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:kaammaa/core/error/failure.dart';
 import 'package:kaammaa/features/auth/data/data_source/remote_data_source/auth_remote_datasource.dart';
@@ -46,6 +48,21 @@ class AuthRemoteRepository implements IAuthRepository {
     try {
       final customer = await _authRemoteDatasource.getCurrentUser(token);
       return Right(customer);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUser(
+    String? name,
+    String? password,
+    File? profilePic,
+    String? token,
+  ) async {
+    try {
+      await _authRemoteDatasource.updateUser(name, password, profilePic, token);
+      return const Right(null);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }

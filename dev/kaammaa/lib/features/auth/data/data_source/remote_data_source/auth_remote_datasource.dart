@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:kaammaa/app/constant/api/api_endpoints.dart';
 import 'package:kaammaa/app/shared_pref/token_shared_prefs.dart';
 import 'package:kaammaa/core/network/api_service.dart';
@@ -7,6 +10,7 @@ import 'package:kaammaa/features/auth/data/data_source/auth_data_source.dart';
 import 'package:kaammaa/features/auth/data/model/auth_api_model.dart';
 import 'package:kaammaa/features/auth/data/model/login_response_model.dart';
 import 'package:kaammaa/features/auth/domain/entity/auth_entity.dart';
+import 'package:mime/mime.dart';
 
 class AuthRemoteDatasource implements IAuthDataSource {
   final ApiService _apiService;
@@ -116,6 +120,59 @@ class AuthRemoteDatasource implements IAuthDataSource {
       }
     } on DioException catch (e) {
       throw Exception("Failed to get data:${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
+
+  @override
+  Future<void> updateUser(
+    String? name,
+    String? password,
+    File? profileImage, // <-- change type here
+    String? token,
+  ) async {
+    try {
+      final formData = FormData();
+
+      if (name != null) formData.fields.add(MapEntry('name', name));
+      if (password != null) formData.fields.add(MapEntry('password', password));
+
+      if (profileImage != null) {
+        final fileName = profileImage.path.split('/').last;
+        final mimeType = lookupMimeType(profileImage.path) ?? 'image/jpeg';
+        formData.files.add(
+          MapEntry(
+            'profile_Pic',
+            await MultipartFile.fromFile(
+              profileImage.path,
+              filename: fileName,
+              contentType: MediaType.parse(
+                mimeType,
+              ), // <-- here you specify mime type
+            ),
+          ),
+        );
+      }
+
+      final response = await _apiService.dio.put(
+        ApiEndpoints.updateCustomer,
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception("Failed to update user: ${response.statusMessage}");
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to update user: ${e.message}");
     } catch (e) {
       throw Exception("An unexpected error occurred: $e");
     }

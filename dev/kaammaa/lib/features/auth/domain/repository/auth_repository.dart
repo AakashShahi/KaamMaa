@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:kaammaa/core/error/failure.dart';
 import 'package:kaammaa/features/auth/data/model/login_response_model.dart';
@@ -13,4 +15,11 @@ abstract interface class IAuthRepository {
   );
 
   Future<Either<Failure, AuthEntity>> getCurrentUser(String? token);
+
+  Future<Either<Failure, void>> updateUser(
+    String? name,
+    String? password,
+    File? profilePic,
+    String? token,
+  );
 }
