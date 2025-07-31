@@ -157,4 +157,33 @@ class CustomerJobsRemoteRepository implements ICustomerJobsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, List<CustomerJobsEntity>>> getFailedJobs(
+    String? token,
+  ) async {
+    try {
+      final failedJobs = await _remoteDatasource.getFailedJobs(token);
+      return Right(failedJobs);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to fetch failed jobs: ${e.toString()}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteFailedJob(
+    String? token,
+    String? jobId,
+  ) async {
+    try {
+      await _remoteDatasource.deleteFailedJob(token, jobId);
+      return const Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to delete failed job: ${e.toString()}"),
+      );
+    }
+  }
 }

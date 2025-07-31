@@ -44,4 +44,10 @@ abstract interface class ICustomerJobsRepository {
   Future<Either<Failure, List<CustomerJobsEntity>>> getInProgressJobs(
     String? token,
   );
+
+  Future<Either<Failure, List<CustomerJobsEntity>>> getFailedJobs(
+    String? token,
+  );
+
+  Future<Either<Failure, void>> deleteFailedJob(String? token, String? jobId);
 }

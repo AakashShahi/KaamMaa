@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:kaammaa/core/error/failure.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/entity/customer_jobs_entity.dart';
 
 abstract interface class ICustomerJobsDatasource {
@@ -20,4 +22,8 @@ abstract interface class ICustomerJobsDatasource {
   Future<void> rejectRequestedJob(String? token, String jobId);
 
   Future<List<CustomerJobsEntity>> getInProgressJobs(String? token);
+
+  Future<List<CustomerJobsEntity>> getFailedJobs(String? token);
+
+  Future<Either<Failure, void>> deleteFailedJob(String? token, String? jobId);
 }

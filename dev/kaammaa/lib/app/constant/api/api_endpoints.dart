@@ -34,6 +34,8 @@ class ApiEndpoints {
   static const String getInProgressJob = "customer/jobs/in-progress";
   static const String getCustomer = "customer/me";
   static const String updateCustomer = "customer/me";
+  static const String getFailedJob = "customer/jobs/failed";
+  static const String deleteFailedJob = "customer/jobs/soft-delete";
 
   //Customer get workers
   static const String customerGetWorkers = "customer/worker";

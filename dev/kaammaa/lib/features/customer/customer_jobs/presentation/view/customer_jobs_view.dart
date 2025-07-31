@@ -9,6 +9,8 @@ import 'package:kaammaa/features/customer/customer_jobs/presentation/view/custom
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view/customer_jobs/customer_requested_jobs.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_assigned_job_view_model/customer_assigned_job_view_model.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_failed_job_view_model/customer_failed_job_event.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_failed_job_view_model/customer_failed_job_view_model.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_event.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_event.dart';
@@ -107,7 +109,13 @@ class CustomerJobsView extends StatelessWidget {
                             ..add(LoadCustomerRequestedJobs()),
                   child: const CustomerRequestedJobs(),
                 ),
-                CustomerFailedJobs(),
+                BlocProvider<CustomerFailedJobsViewModel>(
+                  create:
+                      (_) =>
+                          serviceLocater<CustomerFailedJobsViewModel>()
+                            ..add((LoadCustomerFailedJobs())),
+                  child: const CustomerFailedJobs(),
+                ),
               ],
             ),
           ),

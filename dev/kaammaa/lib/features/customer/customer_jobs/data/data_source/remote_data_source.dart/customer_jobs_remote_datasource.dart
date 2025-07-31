@@ -1,5 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:kaammaa/app/constant/api/api_endpoints.dart';
+import 'package:kaammaa/core/error/failure.dart';
 import 'package:kaammaa/core/network/api_service.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/data_source/customer_jobs_datasource.dart';
 import 'package:kaammaa/features/customer/customer_jobs/data/dto/get_all_customer_jobs_dto.dart';
@@ -258,6 +260,55 @@ class CustomerJobsRemoteDatasource implements ICustomerJobsDatasource {
       }
     } on DioException catch (e) {
       throw Exception("Failed to fetch in progress jobs: ${e.message}");
+    } catch (e) {
+      throw Exception("An unexpected error occurred: $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteFailedJob(
+    String? token,
+    String? jobId,
+  ) async {
+    try {
+      final response = await _apiService.dio.delete(
+        "${ApiEndpoints.deleteFailedJob}/$jobId/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(null);
+      } else {
+        throw Exception(
+          "Failed to delete failed job: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to delete failed job: ${e.message}");
+    } catch (e) {
+      throw Exception(
+        "An unexpected error occurred while deleting failed job: $e",
+      );
+    }
+  }
+
+  @override
+  Future<List<CustomerJobsEntity>> getFailedJobs(String? token) async {
+    try {
+      final response = await _apiService.dio.get(
+        "${ApiEndpoints.getFailedJob}/",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.statusCode == 200) {
+        GetAllCustomerJobsDto getAllCustomerJobsDto =
+            GetAllCustomerJobsDto.fromJson(response.data);
+        return CustomerJobsApiModel.toEntityList(getAllCustomerJobsDto.data);
+      } else {
+        throw Exception(
+          "Failed to fetch failed jobs: ${response.statusMessage}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception("Failed to fetch failed jobs: ${e.message}");
     } catch (e) {
       throw Exception("An unexpected error occurred: $e");
     }

@@ -16,7 +16,9 @@ import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/
 import 'package:kaammaa/features/customer/customer_home/presentation/view_model/customer_home_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/accept_requested_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/cancel_assigned_job_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/delete_failed_jobs_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_assigned_job_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_failed_jobs_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_inprogress_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_requested_jobs_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/reject_requested_job_usecase.dart';
@@ -31,6 +33,7 @@ import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/assign_w
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/delete_posted_job_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/get_all_public_jobs_usecase.dart';
 import 'package:kaammaa/features/customer/customer_jobs/domain/use_case/post_public_job_usecase.dart';
+import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_failed_job_view_model/customer_failed_job_view_model.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_inprogress_viewmodel/customer_inprogress_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_jobs_view_model/customer_posted_jobs_viewmodel.dart';
 import 'package:kaammaa/features/customer/customer_jobs/presentation/view_model/customer_post_job_view_model/customer_post_job_viewmodel.dart';
@@ -335,6 +338,27 @@ Future<void> _initCustomerJobsModule() async {
   serviceLocater.registerFactory(
     () => CustomerInProgressJobsViewModel(
       serviceLocater<GetInprogressJobUsecase>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => DeleteFailedJobsUsecase(
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => GetFailedJobsUsecase(
+      customerJobsRepository: serviceLocater<CustomerJobsRemoteRepository>(),
+      tokenSharedPrefs: serviceLocater<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocater.registerFactory(
+    () => CustomerFailedJobsViewModel(
+      getFailedJobsUsecase: serviceLocater<GetFailedJobsUsecase>(),
+      deleteFailedJobsUsecase: serviceLocater<DeleteFailedJobsUsecase>(),
     ),
   );
 }
