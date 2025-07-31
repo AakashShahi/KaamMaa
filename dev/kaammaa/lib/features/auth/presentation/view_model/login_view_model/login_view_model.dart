@@ -6,14 +6,13 @@ import 'package:kaammaa/core/common/app_colors.dart';
 import 'package:kaammaa/core/common/app_flushbar.dart';
 import 'package:kaammaa/features/auth/domain/use_case/auth_login_usecase.dart';
 import 'package:kaammaa/features/auth/presentation/view/signup_view.dart';
+import 'package:kaammaa/features/auth/presentation/view/workerinfo.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_event.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:kaammaa/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view/customer_dashboard_view.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
-import 'package:kaammaa/features/worker/worker_dashboard/presentation/view/worker_dashboard_view.dart';
-import 'package:kaammaa/features/worker/worker_dashboard/presentation/view_model/worker_dashboard_view_model.dart';
 
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
   final AuthLoginUsecase _authLoginUsecase;
@@ -48,9 +47,14 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
           icon: const Icon(Icons.error, color: Colors.white),
         );
       },
-      (userId) {
+      (loginResponse) async {
         emit(state.copyWith(isLoading: false, isSuccess: true));
-        add(NavigateToDashBoardViewEvent(context: event.context));
+
+        if (loginResponse.role == "worker") {
+          showWorkerInfoDialog(event.context);
+        } else {
+          add(NavigateToDashBoardViewEvent(context: event.context));
+        }
       },
     );
   }
@@ -89,32 +93,19 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
           icon: const Icon(Icons.error, color: Colors.white),
         );
       },
-      (role) async {
-        if (role == "worker") {
-          Navigator.pushAndRemoveUntil(
-            event.context,
-            MaterialPageRoute(
-              builder:
-                  (context) => BlocProvider.value(
-                    value: serviceLocater<WorkerDashboardViewModel>(),
-                    child: const WorkerDashboardView(),
-                  ),
-            ),
-            (route) => false,
-          );
-        } else {
-          Navigator.pushAndRemoveUntil(
-            event.context,
-            MaterialPageRoute(
-              builder:
-                  (context) => BlocProvider.value(
-                    value: serviceLocater<CustomerDashboardViewModel>(),
-                    child: const CustomerDashboardView(),
-                  ),
-            ),
-            (route) => false,
-          );
-        }
+      (_) async {
+        // Only navigate to Customer Dashboard, no role check
+        Navigator.pushAndRemoveUntil(
+          event.context,
+          MaterialPageRoute(
+            builder:
+                (context) => BlocProvider.value(
+                  value: serviceLocater<CustomerDashboardViewModel>(),
+                  child: const CustomerDashboardView(),
+                ),
+          ),
+          (route) => false,
+        );
 
         await AppFlushbar.show(
           context: event.context,

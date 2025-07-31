@@ -55,7 +55,6 @@ import 'package:kaammaa/features/customer/customer_workers/domain/use_case/get_m
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
 import 'package:kaammaa/features/selection/presentation/view_model/selection_view_model.dart';
 import 'package:kaammaa/features/splash/presentation/view_model/splash_view_model.dart';
-import 'package:kaammaa/features/worker/worker_dashboard/presentation/view_model/worker_dashboard_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final serviceLocater = GetIt.instance;
@@ -68,9 +67,6 @@ Future initDependencies() async {
   await _initOnBoardingModule();
   await _initSelectionModule();
   await _initAuthModule();
-
-  //Worker Dashboard Module
-  await _initWorkerDashboardModule();
 
   //Customer Dashboard Module
   await _initCustomerDashboardModule();
@@ -187,9 +183,9 @@ Future _initAuthModule() async {
 
 //Worker Dashboard Module
 // ________________________________________________________________
-Future<void> _initWorkerDashboardModule() async {
-  serviceLocater.registerLazySingleton(() => WorkerDashboardViewModel());
-}
+// Future<void> _initWorkerDashboardModule() async {
+//   serviceLocater.registerLazySingleton(() => WorkerDashboardViewModel());
+// }
 
 //Customer Dashboard Module
 // ________________________________________________________________

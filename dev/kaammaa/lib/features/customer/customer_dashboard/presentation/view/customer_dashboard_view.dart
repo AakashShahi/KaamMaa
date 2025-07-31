@@ -5,6 +5,7 @@ import 'package:kaammaa/core/utils/backend_image_url.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_event.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_state.dart';
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_view_model.dart';
+import 'package:kaammaa/features/notiications/presentation/view/notification_view.dart';
 
 class CustomerDashboardView extends StatelessWidget {
   const CustomerDashboardView({super.key});
@@ -94,23 +95,14 @@ class CustomerDashboardView extends StatelessWidget {
                             color: Colors.white,
                             size: 30,
                           ),
-                          onPressed: () {},
-                        ),
-                        Positioned(
-                          right: 10,
-                          top: 8,
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 1.5,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder:
+                                    (_) => const CustomerNotificationView(),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),

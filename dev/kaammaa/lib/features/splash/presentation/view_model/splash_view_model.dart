@@ -6,8 +6,6 @@ import 'package:kaammaa/features/customer/customer_dashboard/presentation/view/c
 import 'package:kaammaa/features/customer/customer_dashboard/presentation/view_model/customer_dashboard_view_model.dart';
 import 'package:kaammaa/features/onboarding/presentation/view/onboarding_view.dart';
 import 'package:kaammaa/features/onboarding/presentation/view_model/onboarding_view_model.dart';
-import 'package:kaammaa/features/worker/worker_dashboard/presentation/view/worker_dashboard_view.dart';
-import 'package:kaammaa/features/worker/worker_dashboard/presentation/view_model/worker_dashboard_view_model.dart';
 
 class SplashViewModel extends Cubit<void> {
   SplashViewModel() : super(null);
@@ -25,19 +23,8 @@ class SplashViewModel extends Cubit<void> {
     if (!context.mounted) return;
 
     if (token != null && token.isNotEmpty && role != null) {
-      // User already logged in
-      if (role == "worker") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) => BlocProvider.value(
-                  value: serviceLocater<WorkerDashboardViewModel>(),
-                  child: const WorkerDashboardView(),
-                ),
-          ),
-        );
-      } else if (role == "customer") {
+      // Only allow customer to access dashboard
+      if (role == "customer") {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -49,7 +36,7 @@ class SplashViewModel extends Cubit<void> {
           ),
         );
       } else {
-        // Fallback to onboarding if unknown role
+        // Any other role (like "worker") goes to onboarding
         _navigateToOnboarding(context);
       }
     } else {
