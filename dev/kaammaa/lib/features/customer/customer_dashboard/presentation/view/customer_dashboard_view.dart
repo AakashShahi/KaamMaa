@@ -52,38 +52,39 @@ class CustomerDashboardView extends StatelessWidget {
                         backgroundImage:
                             userPhoto != null
                                 ? NetworkImage(getBackendImageUrl(userPhoto))
-                                : const AssetImage(
-                                      'assets/images/default_profile.png',
-                                    )
+                                : const AssetImage('assets/logo/kaammaa.png')
                                     as ImageProvider,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Hello, $userName",
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              letterSpacing: 0.5,
+                      child: SingleChildScrollView(
+                        // Wrap the Column with this
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Hello, $userName",
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            greeting,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
+                            const SizedBox(height: 6),
+                            Text(
+                              greeting,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white70,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0.2,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Stack(

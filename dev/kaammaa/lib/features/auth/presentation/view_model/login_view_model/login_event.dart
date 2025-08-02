@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 @immutable
-sealed class LoginEvent {}
+class LoginEvent {}
 
 class NavigateToSignUpViewEvent extends LoginEvent {
   final BuildContext context;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 @immutable
-sealed class SignupEvent {}
+class SignupEvent {}
 
 class LoadCoursesAndBatchesEvent extends SignupEvent {}
 
