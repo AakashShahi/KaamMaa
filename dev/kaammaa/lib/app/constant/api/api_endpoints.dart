@@ -45,4 +45,6 @@ class ApiEndpoints {
   static const String getReview = "customer/review";
   static const String deleteReview = "customer/review";
   static const String deleteAllReview = "customer/review";
+  static const String getnotification = "customer/notification";
+  static const String deleteNotification = "customer/notification/delete";
 }
